@@ -1,0 +1,42 @@
+name: Live BUYSELL deployment probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.live-e2e-probe'
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Render health and database
+        shell: bash
+        run: |
+          set -euo pipefail
+          HEALTH="$(curl --retry 4 --retry-delay 2 -fsS https://buysell-api-v1-2.onrender.com/api/v1/health)"
+          echo "$HEALTH"
+          node -e 'const x=JSON.parse(process.argv[1]); if(x.ok!==true||x.database!==true||x.service!=="buysell-api") process.exit(1)' "$HEALTH"
+      - name: Verify products API and Vercel CORS
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --retry 4 --retry-delay 2 -fsS -D /tmp/headers.txt \
+            -H 'Origin: https://buysell-marketplace-v1-2.vercel.app' \
+            'https://buysell-api-v1-2.onrender.com/api/v1/products?limit=3' \
+            -o /tmp/products.json
+          cat /tmp/products.json
+          grep -qi '^access-control-allow-origin: https://buysell-marketplace-v1-2.vercel.app' /tmp/headers.txt
+          node -e 'const x=require("fs").readFileSync("/tmp/products.json","utf8"); const j=JSON.parse(x); if(!Array.isArray(j.items)) process.exit(1)'
+      - name: Verify Vercel production surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --retry 4 --retry-delay 2 -fsS https://buysell-landing-v1-2.vercel.app/ | grep -q 'BUYSELL'
+          curl --retry 4 --retry-delay 2 -fsS https://buysell-marketplace-v1-2.vercel.app/shop | grep -q 'BUYSELL'
+      - name: Verify marketplace bundle targets Render API
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --retry 4 --retry-delay 2 -fsS 'https://cdn.jsdelivr.net/gh/Buysell-Nigeria/V.1.2@878c2ea00e8a3995b8004dbdaf97ddccb2e1e79f/assets/index-Bb67vDRK.js' | grep -q 'buysell-api-v1-2.onrender.com/api/v1'
+          echo 'Marketplace bundle points to Render API.'
