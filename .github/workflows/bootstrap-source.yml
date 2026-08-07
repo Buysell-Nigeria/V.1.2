@@ -20,33 +20,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat \
-            .bootstrap-parts/chunk-00 \
-            .bootstrap-parts/chunk-01 \
-            .bootstrap-parts/chunk-02 \
-            .bootstrap-parts/chunk-03 \
-            .bootstrap-parts/chunk-04 \
-            .bootstrap-parts/chunk-05 \
-            .bootstrap-parts/chunk-06 \
-            .bootstrap-parts/chunk-07 \
-            .bootstrap-parts/fix-08a \
-            .bootstrap-parts/fix-08b \
-            .bootstrap-parts/chunk-09 \
-            .bootstrap-parts/fix-10a0 \
-            .bootstrap-parts/fix-10a1 \
-            .bootstrap-parts/fix-10b \
-            .bootstrap-parts/chunk-11 \
-            .bootstrap-parts/chunk-12 \
-            .bootstrap-parts/chunk-13 \
-            .bootstrap-parts/fix-14a \
-            .bootstrap-parts/fix-14b \
-            .bootstrap-parts/fix-14c \
-            .bootstrap-parts/fix-15a \
-            .bootstrap-parts/fix-15b0 \
-            .bootstrap-parts/fix-15b1 \
-            .bootstrap-parts/fix-15c \
-            .bootstrap-parts/chunk-16 \
-            | base64 -d > /tmp/buysell-v1.2.zip
+          cat .bootstrap-parts/chunk-00 .bootstrap-parts/chunk-01 .bootstrap-parts/chunk-02 .bootstrap-parts/chunk-03 .bootstrap-parts/chunk-04 .bootstrap-parts/chunk-05 .bootstrap-parts/chunk-06 .bootstrap-parts/chunk-07 .bootstrap-parts/fix-08a .bootstrap-parts/fix-08b .bootstrap-parts/chunk-09 .bootstrap-parts/f10-0 .bootstrap-parts/f10-1 .bootstrap-parts/f10-2 .bootstrap-parts/chunk-11 .bootstrap-parts/chunk-12 .bootstrap-parts/chunk-13 .bootstrap-parts/t14-0 .bootstrap-parts/t14-1 .bootstrap-parts/t14-2 .bootstrap-parts/t15-0 .bootstrap-parts/t15-1 .bootstrap-parts/t15-2 .bootstrap-parts/t16-0 .bootstrap-parts/t16-1 .bootstrap-parts/t16-2 | base64 -d > /tmp/buysell-v1.2.zip
           echo 'c15c14d85ce33c4f2189ab4e06e0d4df41347e6795476e6028283307520df12d  /tmp/buysell-v1.2.zip' | sha256sum -c -
           rm -rf /tmp/buysell-extract
           mkdir -p /tmp/buysell-extract
