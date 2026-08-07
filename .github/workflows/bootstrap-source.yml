@@ -1,0 +1,39 @@
+name: Publish BUYSELL V1.2 source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.bootstrap-ready'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .bootstrap-parts/part-* | base64 -d > /tmp/buysell-v1.2.zip
+          echo 'c15c14d85ce33c4f2189ab4e06e0d4df41347e6795476e6028283307520df12d  /tmp/buysell-v1.2.zip' | sha256sum -c -
+          rm -rf /tmp/buysell-extract
+          mkdir -p /tmp/buysell-extract
+          unzip -q /tmp/buysell-v1.2.zip -d /tmp/buysell-extract
+          test -f /tmp/buysell-extract/buysell-v1.2/package.json
+      - name: Replace bootstrap repository with source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a --delete --exclude='.git/' /tmp/buysell-extract/buysell-v1.2/ ./
+          git config user.name 'BUYSELL Migration Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'Publish BUYSELL V1.2 migration'
+          git push origin HEAD:main
