@@ -20,7 +20,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .bootstrap-parts/part-* | base64 -d > /tmp/buysell-v1.2.zip
+          cat .bootstrap-parts/chunk-* | base64 -d > /tmp/buysell-v1.2.zip
           echo 'c15c14d85ce33c4f2189ab4e06e0d4df41347e6795476e6028283307520df12d  /tmp/buysell-v1.2.zip' | sha256sum -c -
           rm -rf /tmp/buysell-extract
           mkdir -p /tmp/buysell-extract
