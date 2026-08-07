@@ -1,0 +1,40 @@
+name: Build Vercel marketplace artifact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.build-vercel-ready'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Build marketplace
+        env:
+          VITE_API_URL: https://buysell-api-v1-2.onrender.com/api/v1
+        run: npm --workspace @buysell/marketplace run build
+      - name: Publish compiled artifact branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/vercel-artifact
+          mkdir -p /tmp/vercel-artifact
+          cp -R frontend/apps/marketplace/dist/. /tmp/vercel-artifact/
+          cp frontend/apps/marketplace/vercel.json /tmp/vercel-artifact/vercel.json
+          git config user.name 'BUYSELL Build Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git checkout --orphan vercel-artifacts
+          git rm -rf .
+          cp -R /tmp/vercel-artifact/. ./
+          git add -A
+          git commit -m 'Build marketplace for Vercel'
+          git push --force origin HEAD:vercel-artifacts
