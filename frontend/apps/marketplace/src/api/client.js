@@ -1,4 +1,7 @@
-const API_URL=(import.meta.env.VITE_API_URL||'http://localhost:4000/api/v1').replace(/\/$/,'');
+const PROD_API_URL='https://buysell-api-v1-2.onrender.com/api/v1';
+const LOCAL_API_URL='http://localhost:4000/api/v1';
+const DEFAULT_API_URL=typeof window!=='undefined'&&['localhost','127.0.0.1'].includes(window.location.hostname)?LOCAL_API_URL:PROD_API_URL;
+const API_URL=(import.meta.env.VITE_API_URL||DEFAULT_API_URL).replace(/\/$/,'');
 const ACCESS='bs_access_token',REFRESH='bs_refresh_token';
 export const tokenStore={getAccess:()=>localStorage.getItem(ACCESS),getRefresh:()=>localStorage.getItem(REFRESH),set:(a,r)=>{if(a)localStorage.setItem(ACCESS,a);if(r)localStorage.setItem(REFRESH,r)},clear:()=>{localStorage.removeItem(ACCESS);localStorage.removeItem(REFRESH)}};
 async function doFetch(path,options={}){const headers={...(options.body instanceof FormData?{}:{'Content-Type':'application/json'}),...(options.headers||{})};const token=tokenStore.getAccess();if(token)headers.Authorization=`Bearer ${token}`;return fetch(`${API_URL}${path}`,{...options,headers});}
