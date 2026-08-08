@@ -9,6 +9,7 @@ import './styles/global.css';
 import './styles/redesign.css';
 import './styles/commerce.css';
 import './styles/buyer.css';
+import './styles/auth-account.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
