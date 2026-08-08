@@ -7,6 +7,7 @@ import { AppRoutes } from './routes/AppRoutes.jsx';
 import './styles/brand.css';
 import './styles/global.css';
 import './styles/redesign.css';
+import './styles/commerce.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
