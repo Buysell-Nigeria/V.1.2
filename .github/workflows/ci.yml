@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -22,3 +25,18 @@ jobs:
           name: marketplace-dist
           path: frontend/apps/marketplace/dist
           if-no-files-found: error
+      - name: Publish marketplace static branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          rm -rf /tmp/buysell-marketplace-dist
+          cp -R frontend/apps/marketplace/dist /tmp/buysell-marketplace-dist
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan vercel-static
+          git rm -rf .
+          git clean -fdx
+          cp -R /tmp/buysell-marketplace-dist/. .
+          touch .nojekyll
+          git add .
+          git commit -m "Publish marketplace static build ${GITHUB_SHA}"
+          git push --force origin vercel-static
