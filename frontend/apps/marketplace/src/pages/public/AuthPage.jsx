@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, ShoppingBag, Store, Truck, UserRound, Warehouse } from 'lucide-react';
 import { useAuth } from '../../auth/AuthContext.jsx';
+import { BrandLogo } from '../../components/BrandLogo.jsx';
 
 const roles = [
   { value: 'buyer', label: 'Shop', note: 'Find products and track orders', icon: ShoppingBag },
@@ -38,7 +39,7 @@ export function AuthPage() {
   };
 
   return <main className="bs2-auth-page">
-    <header className="bs2-auth-header"><Link to="/shop" aria-label="Return to BUYSELL shop"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL"/></Link><Link to="/shop"><ArrowLeft size={16}/> Back to shop</Link></header>
+    <header className="bs2-auth-header"><Link to="/shop" aria-label="Return to BUYSELL shop"><BrandLogo surface="light" /></Link><Link to="/shop"><ArrowLeft size={16}/> Back to shop</Link></header>
     <div className="bs2-auth-layout">
       <section className="bs2-auth-card">
         <span className="bs2-auth-eyebrow">BUYSELL ACCOUNT</span>
