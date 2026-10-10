@@ -7,6 +7,7 @@ import './responsive.css';
 import './enhancements.css';
 import './promo-carousel.css';
 import './product-media.css';
+import './platform-polish.css';
 import './storefront-experience.css';
 
 const root = document.getElementById('root');
