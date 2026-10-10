@@ -53,12 +53,18 @@ export function normalizeProduct(input: unknown): Product {
     ? asRecord(product.variants[0])
     : asRecord(product.variant);
   const media = Array.isArray(product.media) ? product.media : [];
-  const images = media
-    .map((entry: unknown) => {
-      const item = asRecord(entry);
-      return item.url ?? asRecord(item.asset).publicUrl;
-    })
-    .filter(Boolean) as string[];
+  // Media can include promotional/product videos. Never hand a video URL
+  // to an <img> tag, or hide a real video behind a broken thumbnail.
+  const assets = media.map((entry: unknown) => {
+    const item = asRecord(entry);
+    const url = String(item.url ?? asRecord(item.asset).publicUrl ?? "");
+    const video = String(item.kind ?? "").toUpperCase() === "VIDEO" ||
+      String(item.mimeType ?? asRecord(item.asset).mimeType ?? "").startsWith("video/") ||
+      /\\.(mp4|webm|mov|ogg)(?:\\?|$)/i.test(url);
+    return { url, video };
+  }).filter(asset => asset.url);
+  const images = assets.filter(asset => !asset.video).map(asset => asset.url);
+  const videoUrl = assets.find(asset => asset.video)?.url;
   const inventory = asRecord(variant.inventory);
   const available =
     variant.available ??
@@ -80,6 +86,7 @@ export function normalizeProduct(input: unknown): Product {
     currency: "NGN",
     image: storefrontImageUrl(images[0]),
     images,
+    videoUrl,
     category: product.category,
     store: store.id
       ? {
