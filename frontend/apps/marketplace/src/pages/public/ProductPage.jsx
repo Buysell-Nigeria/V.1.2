@@ -103,10 +103,10 @@ export function ProductPage() {
     }
   }
 
-  // The order API currently charges product.price; never display an unhonoured flash_price.
-  const effectivePrice = Number(product?.price || 0);
-  const discount = product?.original_price && Number(product.original_price)>effectivePrice
-    ? Math.round((1-effectivePrice/Number(product.original_price))*100) : 0;
+  // Keep the original pricing fields and checkout behavior unchanged.
+  const effectivePrice = Number(product?.flash_price || product?.price || 0);
+  const discount = product?.flash_price && Number(product.flash_price) < Number(product.price)
+    ? Math.round((1 - Number(product.flash_price) / Number(product.price)) * 100) : 0;
   const images=useMemo(()=>{
     let list=product?.images;
     if(typeof list==='string'){try{list=JSON.parse(list)}catch{list=[]}}
@@ -122,8 +122,7 @@ export function ProductPage() {
   const rating = Number(product.rating || product.average_rating || 0);
 
   const addToCart = () => {
-    if(!available)return;
-    cart.add({ ...product, price: effectivePrice }, Math.min(quantity,Number(product.stock_quantity)) );
+    cart.add({ ...product, price: effectivePrice }, quantity);
     setSaved(`${quantity} item${quantity > 1 ? 's' : ''} added to cart.`);
   };
 
@@ -153,7 +152,7 @@ export function ProductPage() {
 
           <div className="product-price-line">
             <strong>{formatMoney(effectivePrice)}</strong>
-            {discount > 0 && <del>{formatMoney(product.original_price)}</del>}
+            {discount > 0 && <del>{formatMoney(product.price)}</del>}
           </div>
 
           <div className="product-option-block">
