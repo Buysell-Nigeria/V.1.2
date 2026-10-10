@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { BadgeCheck, CreditCard, MapPin, ShieldCheck, Truck } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { useCart } from '../../state/CartContext.jsx';
-import { getOrderEstimate } from '../../utils/pricing.js';
 
 const money = value => `₦${(Number(value || 0) / 100).toLocaleString()}`;
 
@@ -20,7 +19,8 @@ export function CheckoutPage() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
-  const { shipping: deliveryFee, platformFee, total } = useMemo(() => getOrderEstimate(cart.items), [cart.items]);
+  const deliveryFee = cart.items.length ? 650000 : 0;
+  const total = useMemo(() => cart.subtotal + deliveryFee, [cart.subtotal, deliveryFee]);
 
   async function submit(event) {
     event.preventDefault();
@@ -100,7 +100,7 @@ export function CheckoutPage() {
 
           {error && <p className="error">{error}</p>}
           <button disabled={!cart.items.length || busy} className="primary-cta checkout-submit">
-            {busy ? 'Preparing secure checkout…' : form.payment_method === 'flutterwave' ? 'Continue to secure payment' : 'Create order and continue'}
+            {busy ? 'Preparing secure checkout…' : form.payment_method === 'flutterwave' ? 'Continue to Flutterwave payment' : 'Create order and continue'}
           </button>
         </section>
 
@@ -111,18 +111,17 @@ export function CheckoutPage() {
               <article key={item.id}>
                 <span className="checkout-summary-image">{item.image_url ? <img src={item.image_url} alt={item.name} /> : 'BS'}</span>
                 <div><strong>{item.name}</strong><small>Qty {item.quantity}</small></div>
-                <b>{money(Number(item.price || 0) * item.quantity)}</b>
+                <b>{money(Number(item.flash_price || item.price || 0) * item.quantity)}</b>
               </article>
             ))}
           </div>
           <div className="checkout-summary-line"><span>Subtotal</span><strong>{money(cart.subtotal)}</strong></div>
           <div className="checkout-summary-line"><span>BUYSELL delivery</span><strong>{money(deliveryFee)}</strong></div>
-          <div className="checkout-summary-line"><span>Platform fee (3%)</span><strong>{money(platformFee)}</strong></div>
           <div className="checkout-summary-line discount"><span>Buyer Protection</span><strong>Included</strong></div>
           <hr />
           <div className="checkout-summary-total"><span>Total</span><strong>{money(total)}</strong></div>
 
-          <div className="checkout-security-card"><ShieldCheck size={19} /><div><strong>Secure checkout</strong><span>The final payable amount is confirmed by BUYSELL when your order is created.</span></div></div>
+          <div className="checkout-security-card"><ShieldCheck size={19} /><div><strong>Protected checkout</strong><span>BUYSELL never exposes your database or seller payout details in the browser.</span></div></div>
           <div className="checkout-security-card light"><Truck size={19} /><div><strong>Managed delivery</strong><span>Collection and tracking continue after payment confirmation.</span></div></div>
         </aside>
       </form>
