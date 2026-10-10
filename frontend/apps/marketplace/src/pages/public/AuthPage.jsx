@@ -1,62 +1,63 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { BadgeCheck, ShieldCheck, Store, Truck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, ShoppingBag, Store, Truck, UserRound, Warehouse } from 'lucide-react';
 import { useAuth } from '../../auth/AuthContext.jsx';
+import { BrandLogo } from '../../components/BrandLogo.jsx';
 
+const roles = [
+  { value: 'buyer', label: 'Shop', note: 'Find products and track orders', icon: ShoppingBag },
+  { value: 'seller', label: 'Sell', note: 'Create a store and manage orders', icon: Store },
+  { value: 'supplier', label: 'Supply', note: 'Sell wholesale to approved sellers', icon: Warehouse },
+  { value: 'rider', label: 'Deliver', note: 'Manage assigned deliveries', icon: Truck },
+];
+const roleHome = user => {
+  const r = user?.roles || [];
+  return r.includes('admin') ? '/admin' : r.includes('seller') ? '/seller' : r.includes('supplier') ? '/supplier' : r.includes('seller_manager') ? '/manager' : r.includes('rider') ? '/rider' : '/shop';
+};
 export function AuthPage() {
-  const [mode, setMode] = useState('login');
-  const [error, setError] = useState('');
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'buyer' });
-  const auth = useAuth();
-  const navigate = useNavigate();
+  const [params] = useSearchParams();
   const location = useLocation();
-
-  async function submit(event) {
+  const navigate = useNavigate();
+  const { login, signup, user } = useAuth();
+  const [mode, setMode] = useState(params.get('mode') === 'signup' || location.pathname === '/signup' || location.pathname === '/register' ? 'signup' : 'login');
+  const [form, setForm] = useState({ name:'', email:'', password:'', role:params.get('role') || 'buyer' });
+  const [visible, setVisible] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  useEffect(()=>{ if(params.get('mode')==='signup')setMode('signup'); if(params.get('role')&&roles.some(r=>r.value===params.get('role')))setForm(f=>({...f,role:params.get('role')}));},[params.toString()]);
+  const field = (key, value) => setForm(prev=>({...prev,[key]:value}));
+  const destination = user => location.state?.from || roleHome(user);
+  const submit = async event => {
     event.preventDefault();
-    setError('');
+    if (busy) return;
+    setError('');setBusy(true);
     try {
-      if (mode === 'login') await auth.login(form.email, form.password);
-      else await auth.signup(form);
-      navigate(location.state?.from || '/shop', { replace: true });
-    } catch (requestError) {
-      setError(requestError.message);
-    }
-  }
+      const next = mode==='login' ? await login(form.email.trim(),form.password) : await signup({...form,email:form.email.trim()});
+      navigate(destination(next),{replace:true});
+    } catch (err) { setError(err?.message || 'We could not complete your request. Please try again.'); }
+    finally{setBusy(false);}
+  };
 
-  return (
-    <div className="buysell-auth-page">
-      <section className="auth-brand-panel">
-        <img src="/brand/buysell-primary-dark.svg" alt="BUYSELL" />
-        <span className="market-kicker light">NIGERIA'S TRUSTED MARKETPLACE</span>
-        <h1>Buy smart.<br />Sell easy.</h1>
-        <p>One account for discovery, secure checkout, messaging, order tracking and verified marketplace workspaces.</p>
-        <div className="auth-trust-list">
-          <span><ShieldCheck size={18} /><b>Buyer Protection</b><small>Clear payment and dispute support.</small></span>
-          <span><BadgeCheck size={18} /><b>Verified sellers</b><small>Trust cues stay visible while you shop.</small></span>
-          <span><Truck size={18} /><b>Managed delivery</b><small>Collection and tracking stay coordinated.</small></span>
-        </div>
-      </section>
-
-      <section className="auth-form-panel">
-        <div className="auth-mobile-logo"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL" /></div>
-        <div className="auth-mode-switch"><button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>Sign in</button><button className={mode === 'signup' ? 'active' : ''} onClick={() => setMode('signup')}>Create account</button></div>
-        <div className="auth-form-heading">
-          <span className="market-kicker">{mode === 'login' ? 'WELCOME BACK' : 'JOIN BUYSELL'}</span>
-          <h2>{mode === 'login' ? 'Sign in to your account' : 'Create your BUYSELL account'}</h2>
-          <p>{mode === 'login' ? 'Continue shopping or open the workspace assigned to your role.' : 'Choose the role that matches how you want to use BUYSELL.'}</p>
-        </div>
-        <form className="auth-redesign-form" onSubmit={submit}>
-          {mode === 'signup' && <label><span>Full name</span><input required placeholder="Your full name" value={form.name} onChange={event => setForm({ ...form, name: event.target.value })} /></label>}
-          <label><span>Email address</span><input required type="email" placeholder="you@example.com" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} /></label>
-          <label><span>Password</span><input required type="password" placeholder="Enter your password" value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} /></label>
-          {mode === 'signup' && (
-            <label><span>Account type</span><select value={form.role} onChange={event => setForm({ ...form, role: event.target.value })}><option value="buyer">Buyer — shop and track orders</option><option value="seller">Seller — open a store and source products</option><option value="supplier">Supplier — manage a private seller-facing catalog</option><option value="seller_manager">Seller manager — delegated seller workspace</option><option value="rider">Rider — BUYSELL delivery workspace</option></select></label>
-          )}
-          {error && <p className="error">{error}</p>}
-          <button className="primary-cta auth-submit" type="submit">{mode === 'login' ? 'Sign in to BUYSELL' : 'Create account'}</button>
+  return <main className="bs2-auth-page">
+    <header className="bs2-auth-header"><Link to="/shop" aria-label="Return to BUYSELL shop"><BrandLogo surface="light" /></Link><Link to="/shop"><ArrowLeft size={16}/> Back to shop</Link></header>
+    <div className="bs2-auth-layout">
+      <section className="bs2-auth-card">
+        <span className="bs2-auth-eyebrow">BUYSELL ACCOUNT</span>
+        <h1>{mode==='login'?'Welcome back.':'Make it yours.'}</h1>
+        <p className="bs2-auth-subtitle">{mode==='login'?'Sign in to continue shopping, manage orders or open your workspace.':'One account gives you access to everything you need on BUYSELL.'}</p>
+        {user && <div className="bs2-auth-existing"><CheckCircle2 size={17}/> You're already signed in. <Link to={roleHome(user)}>Continue to your dashboard <ArrowRight size={15}/></Link></div>}
+        <div className="bs2-auth-tabs" role="tablist" aria-label="Authentication mode"><button type="button" role="tab" aria-selected={mode==='login'} className={mode==='login'?'active':''} onClick={()=>{setMode('login');setError('')}}>Sign in</button><button type="button" role="tab" aria-selected={mode==='signup'} className={mode==='signup'?'active':''} onClick={()=>{setMode('signup');setError('')}}>Create account</button></div>
+        <form className="bs2-auth-form" onSubmit={submit}>
+          {mode==='signup' && <><label htmlFor="bs2-auth-name">Full name</label><div className="bs2-input-with-icon"><UserRound size={18}/><input id="bs2-auth-name" required minLength={2} autoComplete="name" value={form.name} placeholder="How should we address you?" onChange={e=>field('name',e.target.value)}/></div></>}
+          <label htmlFor="bs2-auth-email">Email address</label><div className="bs2-input-with-icon"><Mail size={18}/><input id="bs2-auth-email" type="email" required autoComplete="email" value={form.email} placeholder="you@example.com" onChange={e=>field('email',e.target.value)}/></div>
+          <label htmlFor="bs2-auth-password">Password</label><div className="bs2-input-with-icon"><LockKeyhole size={18}/><input id="bs2-auth-password" type={visible?'text':'password'} required minLength={mode==='signup'?8:1} autoComplete={mode==='login'?'current-password':'new-password'} value={form.password} placeholder={mode==='signup'?'At least 8 characters':'Enter your password'} onChange={e=>field('password',e.target.value)}/><button type="button" className="bs2-visibility-toggle" onClick={()=>setVisible(!visible)} aria-label={visible?'Hide password':'Show password'}>{visible?<EyeOff size={18}/>:<Eye size={18}/>}</button></div>
+          {mode==='signup' && <><span className="bs2-role-label">I want to…</span><div className="bs2-role-choices">{roles.map(({value,label,note,icon:Icon})=><label key={value} className={form.role===value?'selected':''}><input type="radio" name="role" value={value} checked={form.role===value} onChange={e=>field('role',e.target.value)}/><Icon size={20}/><span><b>{label}</b><small>{note}</small></span><CheckCircle2 className="bs2-role-check" size={17}/></label>)}</div></>}
+          {error && <div className="bs2-auth-error" role="alert">{error}</div>}
+          <button className="bs2-auth-submit" type="submit" disabled={busy}>{busy?(mode==='login'?'Signing in…':'Creating account…'):(mode==='login'?'Sign in':'Create account')}<ArrowRight size={17}/></button>
         </form>
-        <div className="auth-role-note"><Store size={16} /><p><strong>Seller and supplier access is role-gated.</strong> Supplier catalog data is never exposed to ordinary buyer routes.</p></div>
+        <p className="bs2-auth-terms">By using BUYSELL, you agree to our <Link to="/terms">Terms</Link> and <Link to="/privacy">Privacy Policy</Link>.</p>
       </section>
+      <aside className="bs2-auth-aside"><div className="bs2-auth-aside-visual"><span className="bs2-auth-aside-icon"><ShoppingBag size={39}/></span><div className="bs2-auth-aside-ring"/></div><span className="bs2-aside-tag"><ShieldCheck size={17}/> MADE FOR NIGERIAN COMMERCE</span><h2>Everything in one place.</h2><p>Discover products, stay in touch with sellers, track orders and run your business without switching platforms.</p><div className="bs2-aside-line"><CheckCircle2 size={18}/> Browse products and stores</div><div className="bs2-aside-line"><CheckCircle2 size={18}/> Keep orders and messages together</div><div className="bs2-aside-line"><CheckCircle2 size={18}/> Open a dedicated business workspace</div></aside>
     </div>
-  );
+  </main>;
 }

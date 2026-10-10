@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { BrandLogo } from '../components/BrandLogo.jsx';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 import {
   ArrowLeft,
   BarChart3,
@@ -51,12 +53,13 @@ const icons = {
 
 export function DashboardShell({ title, base, items = [] }) {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="workspace-shell">
       <aside className={open ? 'workspace-sidebar open' : 'workspace-sidebar'}>
         <div className="workspace-brand-row">
-          <Link to="/shop" className="workspace-logo"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL" /></Link>
+          <Link to="/shop" className="workspace-logo"><BrandLogo surface="dark" /></Link>
           <button className="workspace-close" onClick={() => setOpen(false)} aria-label="Close navigation"><X size={19} /></button>
         </div>
         <div className="workspace-title-block">
@@ -86,7 +89,7 @@ export function DashboardShell({ title, base, items = [] }) {
           <div><span>BUYSELL</span><strong>{title} dashboard</strong></div>
           <Link to="/account" className="workspace-profile"><UserRound size={18} /></Link>
         </header>
-        <main className="workspace-content"><Outlet /></main>
+        <main className="workspace-content"><ErrorBoundary key={location.pathname}><Outlet /></ErrorBoundary></main>
       </section>
       {open && <button className="workspace-backdrop" onClick={() => setOpen(false)} aria-label="Close navigation" />}
     </div>

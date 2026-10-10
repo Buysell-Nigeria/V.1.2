@@ -22,6 +22,9 @@ const formatMoney = value => `₦${(Number(value || 0) / 100).toLocaleString()}`
 export function ProductPage() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loadingError, setLoadingError] = useState('');
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [sellerVerified, setSellerVerified] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [saved, setSaved] = useState('');
@@ -30,15 +33,22 @@ export function ProductPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const loadReviews = () => api(`/reviews/product/${id}`).then(setReviews);
-
-  useEffect(() => {
-    Promise.all([api(`/products/${id}`), loadReviews()]).then(([data]) => setProduct(data));
-  }, [id]);
+  const loadReviews = () => api(`/reviews/product/${id}`).then(rows=>setReviews(Array.isArray(rows)?rows:[]));
+  useEffect(()=>{
+    let current=true;
+    setProduct(null);setSelectedImage(0);setLoadingError('');setReviews([]);setSellerVerified(false);
+    api(`/products/${id}`).then(data=>{
+      if(!current)return;
+      setProduct(data);
+      if(data?.seller_id)api(`/profile/${data.seller_id}`).then(profile=>{if(current)setSellerVerified(Boolean(profile?.seller_verified))}).catch(()=>{});
+    }).catch(error=>{if(current)setLoadingError(error.message||'This product could not be loaded.')});
+    api(`/reviews/product/${id}`).then(rows=>{if(current)setReviews(Array.isArray(rows)?rows:[])}).catch(()=>{});
+    return ()=>{current=false};
+  },[id]);
 
   const guarded = fn => async () => {
     if (!user) {
-      navigate('/auth');
+      navigate('/auth', { state: { from: window.location.pathname + window.location.search } });
       return;
     }
     try {
@@ -93,16 +103,20 @@ export function ProductPage() {
     }
   }
 
-  const effectivePrice = useMemo(
-    () => Number(product?.flash_price || product?.price || 0),
-    [product],
-  );
-  const discount = useMemo(() => {
-    if (!product?.flash_price || !product?.price || Number(product.flash_price) >= Number(product.price)) return 0;
-    return Math.round((1 - Number(product.flash_price) / Number(product.price)) * 100);
-  }, [product]);
+  // Keep the original pricing fields and checkout behavior unchanged.
+  const effectivePrice = Number(product?.flash_price || product?.price || 0);
+  const discount = product?.flash_price && Number(product.flash_price) < Number(product.price)
+    ? Math.round((1 - Number(product.flash_price) / Number(product.price)) * 100) : 0;
+  const images=useMemo(()=>{
+    let list=product?.images;
+    if(typeof list==='string'){try{list=JSON.parse(list)}catch{list=[]}}
+    const urls=[product?.image_url,...(Array.isArray(list)?list:[])].filter(Boolean);
+    return [...new Set(urls)];
+  },[product]);
 
+  if (loadingError) return <div className="market-page"><div className="bs2-empty"><h2>We couldn't open this product</h2><p>{loadingError}</p><Link className="button" to="/shop">Explore marketplace</Link></div></div>;
   if (!product) return <div className="market-page market-loading">Loading product…</div>;
+  const available=Number(product.stock_quantity??0)>0;
 
   const sellerName = product.store_name || product.seller_name || 'BUYSELL seller';
   const rating = Number(product.rating || product.average_rating || 0);
@@ -124,27 +138,21 @@ export function ProductPage() {
         <div className="product-media-panel">
           {discount > 0 && <span className="deal-badge product-deal-badge">-{discount}% OFF</span>}
           <button className="product-floating-heart" onClick={collect('wishlist')} aria-label="Save to wishlist"><Heart size={19} /></button>
-          {product.image_url
-            ? <img className="product-primary-image" src={product.image_url} alt={product.name} />
-            : <div className="market-product-placeholder product-large-placeholder">BUYSELL</div>}
-          <div className="product-thumb-row">
-            {[0, 1, 2, 3].map(index => (
-              <span className={index === 0 ? 'product-thumb active' : 'product-thumb'} key={index}>
-                {product.image_url ? <img src={product.image_url} alt="" /> : <span>BS</span>}
-              </span>
-            ))}
-          </div>
+          {images.length ? <img className="product-primary-image" src={images[Math.min(selectedImage,images.length-1)]} alt={product.name} /> : <div className="market-product-placeholder product-large-placeholder">BUYSELL</div>}
+          {images.length>1 && <div className="product-thumb-row" role="group" aria-label="Product photos">
+            {images.map((image,index)=><button type="button" className={index===selectedImage?'product-thumb active':'product-thumb'} key={image} onClick={()=>setSelectedImage(index)} aria-label={`View product photo ${index+1}`}><img src={image} alt=""/></button>)}
+          </div>}
         </div>
 
         <div className="product-buy-panel">
-          <span className="verified-pill"><BadgeCheck size={15} /> Verified seller</span>
+          <span className="verified-pill">{sellerVerified?<><BadgeCheck size={15}/> Verified seller</>:'BUYSELL marketplace'}</span>
           <h1>{product.name}</h1>
-          <p className="product-meta">{product.condition || 'Brand new'} · {product.category || 'Marketplace'} · In stock</p>
+          <p className="product-meta">{product.condition || 'Condition unspecified'} · {product.category || 'Marketplace'} · {available?`${product.stock_quantity} available`:'Out of stock'}</p>
           <div className="product-rating"><Star size={16} fill="currentColor" /> <strong>{rating ? rating.toFixed(1) : 'New'}</strong><span>({product.review_count || reviews.length} reviews)</span></div>
 
           <div className="product-price-line">
             <strong>{formatMoney(effectivePrice)}</strong>
-            {product.flash_price && <del>{formatMoney(product.price)}</del>}
+            {discount > 0 && <del>{formatMoney(product.price)}</del>}
           </div>
 
           <div className="product-option-block">
@@ -152,13 +160,13 @@ export function ProductPage() {
             <div className="qty-control">
               <button type="button" onClick={() => setQuantity(value => Math.max(1, value - 1))}><Minus size={15} /></button>
               <strong>{quantity}</strong>
-              <button type="button" onClick={() => setQuantity(value => value + 1)}><Plus size={15} /></button>
+              <button type="button" disabled={!available||quantity>=Number(product.stock_quantity)} onClick={() => setQuantity(value => Math.min(Number(product.stock_quantity),value + 1))}><Plus size={15} /></button>
             </div>
           </div>
 
           <div className="product-primary-actions">
-            <button className="primary-cta product-cart-cta" onClick={addToCart}><ShoppingCart size={18} /> Add to cart</button>
-            <button className="product-outline-cta" onClick={() => { addToCart(); navigate('/checkout'); }}>Buy now</button>
+            <button disabled={!available} className="primary-cta product-cart-cta" onClick={addToCart}><ShoppingCart size={18} /> {available?'Add to cart':'Out of stock'}</button>
+            <button disabled={!available} className="product-outline-cta" onClick={() => { addToCart(); navigate('/checkout'); }}>Buy now</button>
           </div>
           <div className="product-secondary-actions">
             <button onClick={messageSeller}><MessageCircle size={16} /> Message seller</button>
@@ -168,8 +176,8 @@ export function ProductPage() {
 
           <Link className="seller-trust-card" to={`/store/${product.seller_id}`}>
             <span className="seller-avatar">{sellerName.slice(0, 2).toUpperCase()}</span>
-            <span><strong>{sellerName}</strong><small>Verified store on BUYSELL</small></span>
-            <BadgeCheck size={19} />
+            <span><strong>{sellerName}</strong><small>{sellerVerified?'Verified store':'View store details'}</small></span>
+            {sellerVerified && <BadgeCheck size={19} />}
           </Link>
         </div>
       </section>
@@ -177,8 +185,8 @@ export function ProductPage() {
       <section className="product-trust-strip">
         <article><span><ShieldCheck size={19} /></span><div><strong>Buyer Protection</strong><small>Refund support on eligible orders</small></div></article>
         <article><span><Truck size={19} /></span><div><strong>Managed Delivery</strong><small>BUYSELL controls tracking</small></div></article>
-        <article><span><BadgeCheck size={19} /></span><div><strong>Verified Sellers</strong><small>KYC-backed trust badges</small></div></article>
-        <article><span><Headphones size={19} /></span><div><strong>24/7 Support</strong><small>Help when you need it</small></div></article>
+        <article><span><BadgeCheck size={19} /></span><div><strong>Seller identity</strong><small>Verification shown when available</small></div></article>
+        <article><span><Headphones size={19} /></span><div><strong>Buyer support</strong><small><Link to="/support">Help with your order</Link></small></div></article>
       </section>
 
       <section className="product-details-card">
@@ -213,7 +221,7 @@ export function ProductPage() {
       <div className="mobile-purchase-bar">
         <div><small>Total</small><strong>{formatMoney(effectivePrice * quantity)}</strong></div>
         <button onClick={messageSeller}><MessageCircle size={17} /> Message</button>
-        <button onClick={addToCart}><ShoppingCart size={17} /> Add to cart</button>
+        <button disabled={!available} onClick={addToCart}><ShoppingCart size={17} /> {available?'Add to cart':'Unavailable'}</button>
       </div>
     </div>
   );

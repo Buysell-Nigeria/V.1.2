@@ -1,0 +1,3 @@
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Compass } from 'lucide-react';
+export function NotFoundPage(){return <main className="bs2-error-boundary"><div><Compass size={34} color="#0b6b3a"/><h1>We couldn't find that page.</h1><p>The link may have changed or the page may no longer be available. You can continue shopping from the marketplace.</p><Link to="/shop"><ArrowLeft size={16}/> Back to marketplace</Link></div></main>}
