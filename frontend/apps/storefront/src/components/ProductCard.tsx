@@ -1,6 +1,6 @@
-import { Heart, MapPin, Plus, Star } from "lucide-react";
+import { Heart, MapPin, ShoppingCart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { ProductMediaImage } from "./ProductMediaImage";
 import { formatMoney } from "../lib/format";
 import type { Product } from "../lib/types";
 import { useCart } from "../contexts/CartContext";
@@ -15,9 +15,6 @@ export function ProductCard({
 }) {
   const { addItem, adding } = useCart();
   const { notify } = useToast();
-  const [imageFailed, setImageFailed] = useState(false);
-
-  useEffect(() => setImageFailed(false), [product.image]);
 
   const addToCart = async () => {
     try {
@@ -40,20 +37,8 @@ export function ProductCard({
           to={`/product/${product.slug}`}
           aria-label={`View ${product.name}`}
         >
-          {product.image && !imageFailed ? (
-            <img
-              src={product.image}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              referrerPolicy="no-referrer"
-              onError={() => setImageFailed(true)}
-            />
-          ) : (
-            <span className="product-card__placeholder" aria-hidden="true">
-              BS
-            </span>
-          )}
+          <ProductMediaImage sources={[product.image, ...(product.images || [])]}
+            alt={product.name} fit="contain" placeholderLabel="Product photo unavailable"/>
         </Link>
         {product.badge && (
           <span className="product-card__badge">{product.badge}</span>
@@ -104,7 +89,7 @@ export function ProductCard({
         disabled={adding}
         aria-label={`Add ${product.name} to cart`}
       >
-        <Plus aria-hidden="true" /> <span>Add</span>
+        <ShoppingCart aria-hidden="true" /> <span>Add to cart</span>
       </button>
     </article>
   );
