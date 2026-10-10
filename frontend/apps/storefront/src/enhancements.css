@@ -1,0 +1,46 @@
+.stepper {
+  max-width: 760px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.form-grid__wide {
+  grid-column: 1 / -1;
+}
+
+.verification-summary {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.verification-summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.verification-summary h4 {
+  margin: 0;
+}
+
+.verification-summary .button {
+  justify-self: start;
+}
+
+.verification-summary .button svg {
+  width: 16px;
+}
+
+@media (max-width: 640px) {
+  .stepper {
+    max-width: 100%;
+  }
+
+  .verification-summary .button {
+    width: 100%;
+  }
+}
