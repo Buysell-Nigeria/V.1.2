@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 import {
   ArrowLeft,
   BarChart3,
@@ -51,6 +52,7 @@ const icons = {
 
 export function DashboardShell({ title, base, items = [] }) {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="workspace-shell">
@@ -86,7 +88,7 @@ export function DashboardShell({ title, base, items = [] }) {
           <div><span>BUYSELL</span><strong>{title} dashboard</strong></div>
           <Link to="/account" className="workspace-profile"><UserRound size={18} /></Link>
         </header>
-        <main className="workspace-content"><Outlet /></main>
+        <main className="workspace-content"><ErrorBoundary key={location.pathname}><Outlet /></ErrorBoundary></main>
       </section>
       {open && <button className="workspace-backdrop" onClick={() => setOpen(false)} aria-label="Close navigation" />}
     </div>
