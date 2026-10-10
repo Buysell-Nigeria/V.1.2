@@ -5,6 +5,7 @@ import './lib/legacyCatalogBridge';
 import './styles.css';
 import './responsive.css';
 import './enhancements.css';
+import './storefront-experience.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('BUYSELL application root was not found.');
