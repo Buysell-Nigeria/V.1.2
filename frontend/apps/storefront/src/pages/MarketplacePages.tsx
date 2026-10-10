@@ -16,10 +16,10 @@ import {
   Minus,
   PackageCheck,
   Plus,
-  PlayCircle,
   Search,
   ShieldCheck,
   ShoppingBag,
+  ShoppingCart,
   SlidersHorizontal,
   Star,
   Store,
@@ -43,6 +43,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
+import { ProductGallery } from "../components/ProductGallery";
 import { HomepageCarousel, CampaignRail, VideoFindsRail, type PromoCampaign } from "../components/HomepageCarousel";
 import {
   CardSkeleton,
@@ -591,7 +592,6 @@ export function ProductPage() {
   const { addItem, adding } = useCart();
   const { notify } = useToast();
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
   const product = useQuery({
     queryKey: ["catalog", "product", productSlug],
     queryFn: () =>
@@ -655,43 +655,7 @@ export function ProductPage() {
           <span>{item.name}</span>
         </nav>
         <div className="product-detail">
-          <section className="product-gallery" aria-label="Product images">
-            <div className="product-gallery__main">
-              {item.videoUrl && activeImage === images.length ? (
-                <video controls playsInline preload="metadata" poster={item.image} aria-label={`Product video of ${item.name}`}>
-                  <source src={item.videoUrl} />
-                  Product video is unavailable in this browser.
-                </video>
-              ) : images[activeImage] ? (
-                <img src={images[activeImage]} alt={item.name} />
-              ) : (
-                <span>BS</span>
-              )}
-              <button
-                className="product-gallery__save"
-                aria-label="Save product"
-              >
-                <Heart />
-              </button>
-            </div>
-            {(images.length > 1 || item.videoUrl) && (
-              <div className="product-gallery__thumbs">
-                {images.map((imageUrl, index) => (
-                  <button
-                    className={activeImage === index ? "is-active" : ""}
-                    key={imageUrl}
-                    type="button"
-                    onClick={() => setActiveImage(index)}
-                  >
-                    <img src={imageUrl} alt={`${item.name}, view ${index + 1}`} />
-                  </button>
-                ))}
-                {item.videoUrl && <button type="button" aria-label="Watch product video"
-                  className={activeImage === images.length ? "is-active bs-video-thumb" : "bs-video-thumb"}
-                  onClick={() => setActiveImage(images.length)}><PlayCircle size={26}/><small>Video</small></button>}
-              </div>
-            )}
-          </section>
+          <ProductGallery name={item.name} images={images} videoUrl={item.videoUrl}/>
           <section className="product-buybox">
             {item.badge && (
               <span className="deal-label">Deal {item.badge}</span>
@@ -755,7 +719,7 @@ export function ProductPage() {
                 onClick={() => void add()}
                 disabled={adding}
               >
-                Add to cart
+                <ShoppingCart aria-hidden="true" size={19}/> Add to cart
               </button>
             </div>
             <div className="buybox-assurances">
@@ -841,7 +805,7 @@ export function ProductPage() {
           onClick={() => void add()}
           disabled={adding}
         >
-          Add to cart
+          <ShoppingCart aria-hidden="true" size={18}/> Add to cart
         </button>
       </div>
     </>
