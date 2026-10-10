@@ -26,6 +26,14 @@ import {
   Truck,
   Upload,
   X,
+  Smartphone,
+  Laptop,
+  Shirt,
+  House,
+  HeartPulse,
+  Dumbbell,
+  Car,
+  Baby,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -77,6 +85,19 @@ interface HomeData {
   featured: Product[];
   recentlyViewed?: Product[];
   campaigns?: PromoCampaign[];
+}
+
+function CategoryArtwork({ slug }: {slug:string}) {
+  const id=slug.toLowerCase();
+  if (id.includes("phone")) return <Smartphone size={28} strokeWidth={1.8}/>;
+  if (id.includes("electronic")) return <Laptop size={28} strokeWidth={1.8}/>;
+  if (id.includes("fashion")) return <Shirt size={28} strokeWidth={1.8}/>;
+  if (id.includes("home")) return <House size={28} strokeWidth={1.8}/>;
+  if (id.includes("beauty")) return <HeartPulse size={28} strokeWidth={1.8}/>;
+  if (id.includes("sport")) return <Dumbbell size={28} strokeWidth={1.8}/>;
+  if (id.includes("auto")) return <Car size={28} strokeWidth={1.8}/>;
+  if (id.includes("baby") || id.includes("kids")) return <Baby size={28} strokeWidth={1.8}/>;
+  return <ShoppingBag size={28} strokeWidth={1.8}/>;
 }
 
 const trustPoints = [
@@ -158,7 +179,7 @@ export function HomePage() {
                 <span
                   className={`category-pill__art category-pill__art--${index % 6}`}
                 >
-                  {category.name.slice(0, 1)}
+                  <CategoryArtwork slug={category.slug}/>
                 </span>
                 <strong>{category.name}</strong>
                 <small>
