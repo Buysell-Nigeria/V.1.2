@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Minus, Plus, ShieldCheck, ShoppingBag, Trash2, Truck } from 'lucide-react';
 import { useCart } from '../../state/CartContext.jsx';
+import { getOrderEstimate } from '../../utils/pricing.js';
 
 const money = value => `₦${(Number(value || 0) / 100).toLocaleString()}`;
 
 export function CartPage() {
   const cart = useCart();
-  const deliveryEstimate = cart.items.length ? 650000 : 0;
+  const { shipping: deliveryEstimate, platformFee, total } = getOrderEstimate(cart.items);
 
   if (!cart.items.length) {
     return (
@@ -32,7 +33,7 @@ export function CartPage() {
       <div className="cart-layout">
         <section className="cart-items-card">
           {cart.items.map(item => {
-            const unitPrice = Number(item.flash_price || item.price || 0);
+            const unitPrice = Number(item.price || 0);
             return (
               <article className="cart-product-row" key={item.id}>
                 <Link className="cart-product-image" to={`/products/${item.id}`}>
@@ -63,10 +64,11 @@ export function CartPage() {
         <aside className="cart-summary-card">
           <h2>Order summary</h2>
           <div><span>Subtotal</span><strong>{money(cart.subtotal)}</strong></div>
-          <div><span>Estimated BUYSELL delivery</span><strong>{money(deliveryEstimate)}</strong></div>
+          <div><span>BUYSELL delivery</span><strong>{money(deliveryEstimate)}</strong></div>
+          <div><span>Platform fee (3%)</span><strong>{money(platformFee)}</strong></div>
           <div className="summary-discount"><span>Buyer Protection</span><strong>Included</strong></div>
           <hr />
-          <div className="cart-total"><span>Estimated total</span><strong>{money(cart.subtotal + deliveryEstimate)}</strong></div>
+          <div className="cart-total"><span>Estimated total</span><strong>{money(total)}</strong></div>
           <Link className="primary-cta cart-checkout-cta" to="/checkout">Proceed to checkout <ArrowRight size={17} /></Link>
           <p className="cart-security-note"><ShieldCheck size={16} /> Payment is confirmed before collection begins.</p>
           <p className="cart-security-note"><Truck size={16} /> BUYSELL-managed delivery keeps tracking visible.</p>
