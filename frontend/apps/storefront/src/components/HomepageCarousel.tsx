@@ -123,8 +123,8 @@ export function HomepageCarousel({ products = [], campaigns = [] }: { products?:
 
   const slides = useMemo<Slide[]>(() => {
     const photos = products.map(p => p.image || p.images?.[0]).filter((u):u is string => Boolean(u));
-    const fashion = products.filter(p => p.category?.slug === "fashion").map(p => p.image).filter((u):u is string => Boolean(u));
-    const electronics = products.filter(p => p.category?.slug === "electronics").map(p => p.image).filter((u):u is string => Boolean(u));
+    const fashion = products.filter(p => (typeof p.category === "string" ? p.category : p.category?.slug) === "fashion").map(p => p.image).filter((u):u is string => Boolean(u));
+    const electronics = products.filter(p => (typeof p.category === "string" ? p.category : p.category?.slug) === "electronics").map(p => p.image).filter((u):u is string => Boolean(u));
     const generated: Slide[] = [
       {id:"shop",kicker:"THE BETTER WAY TO SHOP",title:"A little more to love.",body:"Fresh finds from Nigerian stores.",cta:"Explore products",href:"/products",kind:"products",images:photos.slice(0,3),theme:"forest"},
       {id:"fashion",kicker:"STYLE STARTS HERE",title:"Find your kind of style.",body:"Discover everyday fashion and accessories.",cta:"Shop fashion",href:"/category/fashion",kind:"products",images:fashion.length ? fashion.slice(0,3) : photos.slice(2,5),theme:"cream"},
@@ -174,7 +174,6 @@ export function HomepageCarousel({ products = [], campaigns = [] }: { products?:
   return <section aria-label="Discover BUYSELL" aria-roledescription="carousel"
     className={`bs-promo-hero bs-promo-hero--${active.theme} container`}
     onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-    onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
     onTouchStart={(event) => setTouchStart(event.touches[0]?.clientX || null)} onTouchEnd={touchEnd}>
     <div className="bs-slide-copy" key={active.id}>
       <span className="bs-slide-eyebrow"><span className="bs-slide-eyebrow-dot" />{active.kicker}</span>
