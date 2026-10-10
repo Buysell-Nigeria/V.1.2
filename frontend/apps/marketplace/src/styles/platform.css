@@ -178,3 +178,24 @@ html{scroll-behavior:smooth}body{font-family:var(--buysell-font-ui);font-size:14
 .workspace-menu{min-width:38px;min-height:38px;border-radius:10px}
 .workspace-content .workspace-heading-row{gap:16px;flex-wrap:wrap}
 @media(max-width:760px){.workspace-topbar{padding:0 14px}.workspace-content .workspace-heading-row h1{font-size:27px}}
+
+/* Unified role-owned resource lists */
+.bs2-resource-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:22px 0 12px}
+.bs2-resource-toolbar label{height:43px;width:min(420px,100%);display:flex;gap:9px;align-items:center;border:1px solid var(--bs2-line);border-radius:11px;padding:0 12px;background:#fff;color:var(--bs2-muted)}
+.bs2-resource-toolbar input{border:0;background:none;outline:none;min-width:0;width:100%;font-size:12px;color:var(--bs2-ink)}
+.bs2-resource-toolbar small{font-size:11px;color:var(--bs2-muted)}
+.bs2-resource-list{display:grid;gap:10px;margin-top:20px}
+.bs2-resource-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px;border:1px solid var(--bs2-line);border-radius:14px;background:#fff;min-width:0}
+.bs2-resource-symbol{width:43px;height:43px;display:grid;place-items:center;background:var(--bs2-mint);color:var(--bs2-forest);border-radius:12px}
+.bs2-resource-item strong,.bs2-resource-item small{display:block}
+.bs2-resource-item strong{font-size:13px;color:var(--bs2-ink);overflow-wrap:anywhere}
+.bs2-resource-item small{font-size:11px;color:var(--bs2-muted);overflow-wrap:anywhere;margin-top:4px}
+.bs2-resource-meta{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+.bs2-resource-meta b{font-size:12px;color:var(--bs2-forest)}
+.bs2-resource-meta .order-status-pill{font-size:10px}
+.bs2-resource-empty{margin-top:22px;min-height:220px;background:#fff;border:1px dashed #cddbcf;border-radius:16px;display:grid;align-content:center;justify-items:center;gap:10px;text-align:center;padding:26px;color:var(--bs2-muted)}
+.bs2-resource-empty svg{color:var(--bs2-forest)}
+.bs2-resource-empty h2{font-size:17px;margin:0;color:var(--bs2-ink)}
+.bs2-resource-empty p{font-size:12px;line-height:1.6;margin:0;max-width:380px}
+.bs2-resource-empty button{margin-top:4px;background:var(--bs2-mint);color:var(--bs2-forest);border:0;border-radius:9px;padding:10px 13px;font-weight:750}
+@media(max-width:760px){.bs2-resource-item{grid-template-columns:38px minmax(0,1fr);gap:10px;padding:13px}.bs2-resource-symbol{width:38px;height:38px}.bs2-resource-meta{grid-column:2;justify-content:flex-start}.bs2-resource-toolbar small{display:none}}
