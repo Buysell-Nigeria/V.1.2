@@ -1,0 +1,13 @@
+{
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://buysell-api-v2.onrender.com/api/v1/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

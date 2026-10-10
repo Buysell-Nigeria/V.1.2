@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /checkout
+Disallow: /orders
+Disallow: /messages
+Disallow: /seller/
+Disallow: /supplier/
+Disallow: /buysell-super-admin
+
+Sitemap: https://buysell-storefront-v2.vercel.app/sitemap.xml

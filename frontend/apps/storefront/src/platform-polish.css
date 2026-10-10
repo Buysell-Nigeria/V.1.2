@@ -1,0 +1,71 @@
+
+/* BUYSELL unified UI polish — changes appearance, not system behavior. */
+:root{--brand-soft:#eaf6ee;--brand-radius:14px}
+.category-pill__art svg{width:34px;height:34px;filter:drop-shadow(0 8px 10px rgba(15,94,50,.08))}
+.category-pill{min-width:0}
+.category-pill__art{border:1px solid rgba(9,90,41,.04)}
+.category-pill:hover strong{color:#0b6b3a}
+.product-card__wish.is-saved{color:#d64f66;border-color:#fae4e8;background:#fff6f7}
+.product-card__wish.is-saved:hover{background:#ffecef}
+.site-header .brand__image{object-fit:contain!important;background:transparent}
+.auth-card,.order-summary,.checkout-section,.cart-items,.cart-summary,.account-card,.product-detail{border-color:#e2e8e2}
+.auth-card{box-shadow:0 6px 34px rgba(7,42,19,.055)}
+.auth-card header h2{font-size:clamp(1.55rem,3vw,2.1rem);letter-spacing:-.04em}
+.auth-card header p{font-size:.88rem;line-height:1.6}
+.auth-card form>label>span{font-size:.8rem}
+.auth-card input:not([type="checkbox"]){font-size:.88rem}
+.auth-card .button--google{border:1px solid #dfe9e1;background:#fff;color:#223b29}
+.auth-card .form-alert{font-size:.8rem;line-height:1.55;border-radius:11px}
+.auth-card .form-alert--warning{background:#fff9e9;border:1px solid #f1e5bf;color:#7e6627}
+.cart-page,.checkout-page{max-width:1240px}
+.cart-layout,.checkout-layout{grid-template-columns:minmax(0,1fr) minmax(285px,355px);gap:19px}
+.cart-items,.checkout-section,.order-summary{background:#fff;border:1px solid #e0e9e2;border-radius:17px;box-shadow:0 4px 18px #0a32140b}
+.cart-item{grid-template-columns:98px minmax(0,1fr) auto;gap:14px;padding:16px}
+.cart-item__image{height:96px;width:98px;border-radius:11px}
+.cart-item__image img{object-fit:contain}
+.checkout-section{padding:23px}
+.checkout-section h2{font-size:1.1rem}
+.checkout-page h1,.cart-page h1{letter-spacing:-.04em;font-size:clamp(1.7rem,3vw,2.4rem)}
+.checkout-layout .button--primary,.cart-layout .button--primary{border-radius:12px;min-height:46px}
+.checkout-layout input,.checkout-layout select,.checkout-layout textarea{border-radius:10px;min-height:44px}
+.delivery-option,.payment-method,.address-card{border-radius:12px}
+.order-summary{padding:22px;position:sticky;top:110px}
+.order-summary>h2{font-size:1.1rem}
+.workspace-content h1,.workspace-content h2,.workspace-content h3{letter-spacing:-.034em}
+.workspace-content .stat-card,.workspace-content .dashboard-card,.workspace-content .data-card{border-radius:16px}
+.workspace-content :is(button,input,textarea,select){font-size:13px}
+.workspace-content :is(.form-grid,.editor-layout,.dashboard-grid){min-width:0}
+.breadcrumbs{font-size:.75rem}
+.info-page,.product-page,.catalog-page{min-width:0}
+.product-buybox{min-width:0}
+.product-buybox h1{font-size:clamp(1.65rem,3vw,2.5rem);line-height:1.16;overflow-wrap:anywhere}
+.product-buybox__description{line-height:1.7}
+.mobile-buybar{backdrop-filter:blur(18px)}
+@media(max-width:900px){.cart-layout,.checkout-layout{grid-template-columns:1fr}.order-summary{position:static}}
+@media(max-width:700px){
+  .auth-page{display:block;min-height:100vh;background:#fff}
+  .auth-page__form-wrap{min-height:0!important;display:flex;align-items:flex-start!important;justify-content:center!important;padding:20px 16px 50px!important}
+  .auth-card{width:100%;padding:20px 16px 24px;border:0;box-shadow:none;border-radius:0}
+  .auth-card__mobile-logo{margin-bottom:20px}
+  .auth-card h2{font-size:1.75rem}
+  .auth-card header{margin-bottom:20px}
+  .auth-card form{gap:14px}
+  .cart-page,.checkout-page{padding-top:19px}
+  .cart-layout,.checkout-layout{gap:12px}
+  .cart-item{grid-template-columns:72px minmax(0,1fr);padding:13px;gap:10px}
+  .cart-item__image{width:72px;height:72px}
+  .cart-item__end{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}
+  .cart-item__details>a{font-size:.84rem}
+  .checkout-section,.order-summary{padding:15px}
+  .checkout-header{margin-bottom:14px}
+  .category-pill__art{border-radius:12px;aspect-ratio:1.2}
+  .category-pill__art svg{width:28px;height:28px}
+  .mobile-buybar{padding:8px 12px max(10px,env(safe-area-inset-bottom))}
+  .mobile-buybar .button{min-height:43px;border-radius:10px}
+  .product-buybox__rating{gap:9px}
+  .product-buybox__description{font-size:13px;line-height:1.65}
+  .product-information{gap:14px}
+  .product-information>*{min-width:0}
+  .workspace-content{padding:15px 13px}
+  .workspace-content h1{font-size:clamp(1.65rem,6vw,2.15rem)}
+}
