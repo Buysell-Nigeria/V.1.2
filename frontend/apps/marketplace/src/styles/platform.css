@@ -70,3 +70,63 @@ html{scroll-behavior:smooth}body{font-family:var(--buysell-font-ui);font-size:14
   .bs2-store-editor-form{padding:17px}
 }
 @media(max-width:390px){.buyer-order-tabs button{padding:8px}}
+
+/* Analytics, logistics and operations workspace components */
+.bs2-analytics-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:20px 0}
+.bs2-analytics-stats article{display:grid;gap:8px;background:#fff;border:1px solid var(--bs2-line);border-radius:17px;padding:20px;min-width:0}
+.bs2-analytics-stats article>span{width:39px;height:39px;background:var(--bs2-mint);color:var(--bs2-forest);border-radius:11px;display:grid;place-items:center}
+.bs2-analytics-stats small{font-size:12px;color:var(--bs2-muted)}
+.bs2-analytics-stats strong{font-size:clamp(20px,2.4vw,29px);letter-spacing:-.045em;overflow:hidden;text-overflow:ellipsis}
+.bs2-analytics-columns{display:grid;grid-template-columns:1.2fr 1fr;gap:15px;margin-top:15px}
+.bs2-analytics-panel{background:#fff;border:1px solid var(--bs2-line);border-radius:18px;padding:22px;min-width:0}
+.bs2-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bs2-chart-heading>span{display:flex;gap:8px;align-items:center;font-size:16px;font-weight:800}
+.bs2-chart-heading>span svg{color:var(--bs2-forest)}
+.bs2-chart-heading>small{font-size:11px;color:var(--bs2-muted)}
+.bs2-bar-chart{height:240px;display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid #dce8e0;padding-top:15px;margin-top:23px}
+.bs2-bar-wrap{height:100%;min-width:3px;flex:1;display:flex;align-items:flex-end;cursor:help}
+.bs2-bar{width:100%;border-radius:5px 5px 0 0;min-height:2px;background:linear-gradient(to top,#0b6b3a,#6bbd86);transition:background .2s}
+.bs2-bar-wrap:hover .bs2-bar{background:#08462c}
+.bs2-chart-foot{font-size:11px!important;color:var(--bs2-muted);margin:13px 0 0}
+.bs2-ranking{display:grid;margin-top:18px}
+.bs2-ranking a{display:grid;grid-template-columns:33px 1fr auto 15px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eef2ef;min-width:0}
+.bs2-ranking a:last-child{border-bottom:0}
+.bs2-ranking a>span{color:#96a89b;font-size:14px;font-weight:850}
+.bs2-ranking a strong,.bs2-ranking a small{display:block}
+.bs2-ranking a strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bs2-ranking a small{color:var(--bs2-muted);font-size:11px;margin-top:5px}
+.bs2-ranking a b{font-size:12px;color:var(--bs2-forest)}
+.bs2-ranking a>svg{color:#a5b4a8}
+.bs2-analytics-empty{min-height:195px;display:grid;place-content:center;justify-items:center;gap:10px;text-align:center;color:var(--bs2-muted)}
+.bs2-analytics-empty>svg{color:var(--bs2-forest)}
+.bs2-analytics-empty>strong{font-size:13px;color:var(--bs2-ink)}
+.bs2-analytics-empty>span,.bs2-analytics-empty>a{font-size:11px}
+.bs2-analytics-empty>a{display:inline-flex;align-items:center;gap:7px;color:var(--bs2-forest);font-weight:800}
+.bs2-analytics-skeleton{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:22px 0}
+.bs2-analytics-skeleton>div{height:120px}
+.bs2-dashboard-error{background:#fff0ef;border:1px solid #eecbcb;color:#953d3b;padding:16px;border-radius:11px;margin:16px 0;display:flex;gap:16px;align-items:center;justify-content:space-between}
+.bs2-dashboard-error button{display:inline-flex;align-items:center;gap:7px;padding:10px;border:1px solid #dca8a4;border-radius:8px;background:#fff;color:#903f3c}
+.bs2-page-subtitle{font-size:13px;color:var(--bs2-muted);line-height:1.7}
+.bs2-workspace-filter{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0}
+.bs2-workspace-filter button{padding:9px 13px;border:1px solid var(--bs2-line);border-radius:9px;background:#fff;color:#536558;font-size:12px;font-weight:700}
+.bs2-workspace-filter button.active{background:var(--bs2-deep);color:#fff;border-color:var(--bs2-deep)}
+.bs2-delivery-list{display:grid;gap:12px}
+.bs2-delivery-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px;border:1px solid var(--bs2-line);border-radius:16px;background:#fff}
+.bs2-delivery-card-icon{width:50px;height:50px;display:grid;place-items:center;background:var(--bs2-mint);color:var(--bs2-forest);border-radius:13px}
+.bs2-delivery-card h3{font-size:14px;margin:3px 0 5px}
+.bs2-delivery-card p{font-size:12px;margin:3px 0;color:var(--bs2-muted);line-height:1.6}
+.bs2-delivery-card small{font-size:11px;color:var(--bs2-muted)}
+.bs2-delivery-card .bs2-delivery-actions{display:flex;gap:8px;align-items:center}
+.bs2-delivery-actions a,.bs2-delivery-actions button{display:inline-flex;align-items:center;gap:7px;background:var(--bs2-mint);color:var(--bs2-forest);border:0;padding:10px 12px;border-radius:9px;font-size:11px;font-weight:750}
+.bs2-delivery-actions button{background:var(--bs2-forest);color:#fff}
+.bs2-logistics-detail{display:grid;grid-template-columns:1.3fr .7fr;gap:17px;margin-top:23px}
+.bs2-detail-panel{padding:23px;border-radius:18px;background:#fff;border:1px solid var(--bs2-line)}
+.bs2-detail-panel h2{font-size:18px;margin:0 0 18px}
+.bs2-detail-line{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:13px 0;border-bottom:1px solid #eff3ef}
+.bs2-detail-line small{font-size:12px;color:var(--bs2-muted)}
+.bs2-detail-line strong{font-size:13px;text-align:right;overflow-wrap:anywhere}
+.bs2-delivery-status-select{height:43px;padding:0 12px;border:1px solid var(--bs2-line);border-radius:10px;width:100%;font-size:13px}
+.bs2-status-update{border:0;width:100%;min-height:43px;border-radius:10px;background:var(--bs2-forest);color:#fff;font-weight:750;margin-top:12px}
+.bs2-details-empty{border:1px dashed var(--bs2-line);border-radius:16px;padding:35px;text-align:center;color:var(--bs2-muted);background:#fff}
+@media(max-width:1050px){.bs2-analytics-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.bs2-analytics-columns,.bs2-logistics-detail{grid-template-columns:1fr}.bs2-analytics-stats{gap:9px}.bs2-analytics-stats article{padding:15px}.bs2-analytics-stats strong{font-size:20px}.bs2-analytics-panel{padding:17px}.bs2-bar-chart{height:185px}.bs2-delivery-card{grid-template-columns:42px 1fr;padding:14px;gap:10px}.bs2-delivery-card-icon{width:40px;height:40px}.bs2-delivery-card .bs2-delivery-actions{grid-column:1/-1;justify-content:flex-end}.bs2-delivery-actions a,.bs2-delivery-actions button{flex:1;justify-content:center}.bs2-delivery-card h3{font-size:12px}.bs2-delivery-card p{font-size:11px}}
