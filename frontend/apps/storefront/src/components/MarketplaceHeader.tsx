@@ -100,7 +100,7 @@ export function MarketplaceHeader() {
       </div>
       <div className="delivery-strip container">
         <MapPin aria-hidden="true" /> Delivering to{" "}
-        <strong>Lekki Phase 1, Lagos</strong>
+        <strong>across Nigeria</strong>
       </div>
 
       {menuOpen && (
