@@ -63,7 +63,7 @@ export function AuthPage({
   const IntentIcon = content.icon;
 
   if (authUser && (mode === "login" || mode === "signup"))
-    return <Navigate to={mode === "signup" && intent !== "buyer" ? `/${intent}/onboarding` : "/account"} replace />;
+    return <Navigate to={mode === "signup" && intent !== "buyer" ? `/${intent}/onboarding` : returnTo} replace />;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
