@@ -130,3 +130,43 @@ html{scroll-behavior:smooth}body{font-family:var(--buysell-font-ui);font-size:14
 .bs2-details-empty{border:1px dashed var(--bs2-line);border-radius:16px;padding:35px;text-align:center;color:var(--bs2-muted);background:#fff}
 @media(max-width:1050px){.bs2-analytics-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.bs2-analytics-columns,.bs2-logistics-detail{grid-template-columns:1fr}.bs2-analytics-stats{gap:9px}.bs2-analytics-stats article{padding:15px}.bs2-analytics-stats strong{font-size:20px}.bs2-analytics-panel{padding:17px}.bs2-bar-chart{height:185px}.bs2-delivery-card{grid-template-columns:42px 1fr;padding:14px;gap:10px}.bs2-delivery-card-icon{width:40px;height:40px}.bs2-delivery-card .bs2-delivery-actions{grid-column:1/-1;justify-content:flex-end}.bs2-delivery-actions a,.bs2-delivery-actions button{flex:1;justify-content:center}.bs2-delivery-card h3{font-size:12px}.bs2-delivery-card p{font-size:11px}}
+
+/* Admin management - responsive table to action cards */
+.bs2-admin-filter{display:flex;flex-wrap:wrap;align-items:center;gap:11px;margin:23px 0 14px}
+.bs2-admin-search{width:min(420px,100%);height:44px;display:flex;gap:10px;align-items:center;padding:0 13px;background:#fff;border:1px solid var(--bs2-line);border-radius:12px;color:#85958a}
+.bs2-admin-search:focus-within{border-color:#82bd96}
+.bs2-admin-search input{width:100%;min-width:0;border:0;outline:none;background:none;color:var(--bs2-ink)}
+.bs2-admin-status-select{height:44px;display:flex;gap:8px;align-items:center;padding:0 11px;background:#fff;border:1px solid var(--bs2-line);border-radius:12px;font-size:12px;color:var(--bs2-muted)}
+.bs2-admin-status-select select{max-width:170px;border:0;background:none;appearance:none;outline:none;text-transform:capitalize;font-size:12px;color:#374d3d}
+.bs2-admin-filter>small{margin-left:auto;color:var(--bs2-muted);font-size:11px}
+.bs2-admin-table{border-radius:17px;background:#fff;border:1px solid var(--bs2-line);overflow:hidden}
+.bs2-admin-table-heading,.bs2-admin-row{display:grid;grid-template-columns:1.4fr .65fr .8fr 1.7fr;gap:17px;align-items:center;padding:15px 18px}
+.bs2-admin-table-heading{background:#f6f8f6;color:#647368;font-size:11px;font-weight:800;letter-spacing:.025em;border-bottom:1px solid var(--bs2-line)}
+.bs2-admin-row{border-bottom:1px solid #edf1ee}
+.bs2-admin-row:last-child{border-bottom:0}
+.bs2-admin-primary{min-width:0}
+.bs2-admin-primary strong,.bs2-admin-primary small,.bs2-admin-extra b,.bs2-admin-extra small{display:block}
+.bs2-admin-primary strong{font-size:12px;overflow-wrap:anywhere}
+.bs2-admin-primary small{font-size:10px;color:#85958a;margin-top:5px;overflow-wrap:anywhere}
+.bs2-admin-extra b{font-size:12px;color:var(--bs2-deep)}
+.bs2-admin-extra small,.bs2-admin-extra span{font-size:11px;color:#718276;margin-top:5px}
+.bs2-admin-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px}
+.bs2-admin-actions button{min-height:31px;padding:6px 9px;font-size:10px;font-weight:800;border:1px solid #c7dfce;color:var(--bs2-forest);border-radius:8px;background:#f0f8f2;white-space:nowrap}
+.bs2-admin-actions button.danger{border-color:#f3d1cc;color:#a74842;background:#fff5f4}
+.bs2-admin-actions button:disabled{opacity:.4}
+.bs2-admin-row .order-status-pill{justify-self:start}
+.bs2-admin-empty{padding:55px 18px;display:grid;justify-items:center;text-align:center;color:var(--bs2-muted);gap:9px}
+.bs2-admin-empty svg{color:var(--bs2-forest)}
+.bs2-admin-empty h2{margin:0;font-size:17px}
+.bs2-admin-empty p{font-size:12px;margin:0}
+.bs2-admin-success{display:flex;align-items:center;gap:8px;background:var(--bs2-mint);border-radius:10px;padding:12px;color:var(--bs2-forest);font-weight:750;font-size:12px}
+.bs2-admin-footnote{display:flex;align-items:center;gap:8px;color:#7d8a80;font-size:11px;margin-top:15px}
+@media(max-width:960px){
+ .bs2-admin-table-heading{display:none}
+ .bs2-admin-table{display:grid;gap:10px;border:0;background:none;border-radius:0}
+ .bs2-admin-row{grid-template-columns:1fr auto;gap:12px;padding:17px;border:1px solid var(--bs2-line);border-radius:14px;background:#fff}
+ .bs2-admin-row>.order-status-pill{grid-column:2;grid-row:1}
+ .bs2-admin-extra{grid-column:1;grid-row:2}
+ .bs2-admin-actions{grid-column:1/-1;grid-row:3;justify-content:flex-start;border-top:1px solid var(--bs2-line);padding-top:10px}
+}
+@media(max-width:760px){.bs2-admin-filter{gap:7px}.bs2-admin-search{flex:1 1 100%}.bs2-admin-status-select{max-width:75%}.bs2-admin-actions button{font-size:11px;padding:8px 11px}}
