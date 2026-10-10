@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import logoLight from '../assets/brand/buysell_primary_light.svg';
-import logoReverse from '../assets/brand/buysell_reverse_green.svg';
+import logoLight from '../assets/brand/buysell_transparent_color.svg';
+import logoReverse from '../assets/brand/buysell_reverse_transparent.svg';
 
 interface BrandProps {
   inverse?: boolean;
