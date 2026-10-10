@@ -12,7 +12,7 @@ import {
   Truck,
 } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Brand } from "../components/Brand";
 import { Seo } from "../components/Seo";
 import { useAuth } from "../contexts/AuthContext";
@@ -47,7 +47,14 @@ export function AuthPage({
   intent?: Intent;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn, signInWithGoogle, signUp, configured, authUser } = useAuth();
+  const stateFrom = (location.state as {from?:string}|null)?.from;
+  const safelyRemember = (path: string | undefined | null) =>
+    path && path.startsWith("/") && !path.startsWith("//") &&
+    !/^\/(login|signup|auth\/callback|forgot-password|reset-password)(?:\b|\/)/.test(path)
+      ? path : "/account";
+  const returnTo = safelyRemember(stateFrom ?? sessionStorage.getItem("buysell:auth-return"));
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -69,7 +76,8 @@ export function AuthPage({
     try {
       if (mode === "login") {
         await signIn(email, password);
-        navigate("/account");
+        sessionStorage.removeItem("buysell:auth-return");
+        navigate(returnTo, {replace:true});
       } else if (mode === "signup") {
         const result = await signUp({
           email,
@@ -201,6 +209,7 @@ export function AuthPage({
                       onClick={() => {
                         setBusy(true);
                         setError("");
+                        sessionStorage.setItem("buysell:auth-return", returnTo);
                         void signInWithGoogle(intent).catch((caught) => {
                           setError(
                             caught instanceof Error
@@ -392,7 +401,11 @@ export function AuthCallbackPage() {
   useEffect(() => {
     if (!loading && authUser) {
       const pending = sessionStorage.getItem("buysell:capability-intent");
-      navigate(pending === "SELLER" ? "/seller/onboarding" : pending === "SUPPLIER" ? "/supplier/onboarding" : "/account", { replace: true });
+      const stored = sessionStorage.getItem("buysell:auth-return");
+      sessionStorage.removeItem("buysell:auth-return");
+      const destination = stored && stored.startsWith("/") && !stored.startsWith("//") &&
+        !/^\/(login|signup|auth\/callback)(?:\b|\/)/.test(stored) ? stored : "/account";
+      navigate(pending === "SELLER" ? "/seller/onboarding" : pending === "SUPPLIER" ? "/supplier/onboarding" : destination, { replace: true });
     }
   }, [authUser, loading, navigate]);
   return (
