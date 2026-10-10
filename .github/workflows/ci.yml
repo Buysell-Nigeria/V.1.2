@@ -17,6 +17,7 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npm run build
+      - run: npm --workspace @buysell/marketplace run test:render
       - run: find backend/src backend/scripts -name '*.js' -print0 | xargs -0 -n1 node --check
       - name: Upload marketplace build
         if: github.ref == 'refs/heads/main'
