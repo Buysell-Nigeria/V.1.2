@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { ArrowRight, ChevronDown, Heart, House, LayoutGrid, LogOut, Menu, MessageCircle, Package, Search, ShoppingBag, ShoppingCart, Store, UserRound, X } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { useCart } from '../state/CartContext.jsx';
+import { BrandLogo } from '../components/BrandLogo.jsx';
 import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 
 const departments = [['/shop', 'All products'], ['/category/phones', 'Phones'], ['/category/electronics', 'Electronics'], ['/category/fashion', 'Fashion'], ['/category/beauty', 'Beauty'], ['/category/home', 'Home & living']];
@@ -33,7 +34,7 @@ export function AppShell() {
       <header className="bs2-header">
         <div className="bs2-header-inner">
           <button className="bs2-menu-btn" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="bs2-navigation" aria-label={menuOpen ? 'Close menu' : 'Open menu'}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button>
-          <Link className="bs2-logo" to="/shop" aria-label="BUYSELL marketplace home"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL" /></Link>
+          <Link className="bs2-logo" to="/shop" aria-label="BUYSELL marketplace home"><BrandLogo surface="light" /></Link>
           <form className="bs2-search" role="search" onSubmit={search} key={location.pathname === '/search' ? location.search : 'header-search'}><Search size={18} aria-hidden="true"/><input aria-label="Search products" name="q" defaultValue={new URLSearchParams(location.search).get('q') || ''} placeholder="Search products, brands and stores…" autoComplete="off"/><button type="submit" aria-label="Submit search"><span>Search</span><ArrowRight size={17}/></button></form>
           <nav className="bs2-header-actions" aria-label="Your BUYSELL account">
             <NavLink to="/wishlist" className="bs2-icon-link bs2-desktop-action" aria-label="Wishlist"><Heart size={20}/></NavLink>
@@ -57,7 +58,7 @@ export function AppShell() {
       {menuOpen && <button className="bs2-menu-scrim" aria-label="Close menu" onClick={() => setMenuOpen(false)}/>}
       <main className="market-main bs2-main" id="main-content"><ErrorBoundary key={location.pathname}><Outlet/></ErrorBoundary></main>
       <footer className="bs2-footer">
-        <div className="bs2-footer-top"><Link to="/shop"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL"/></Link><p>A better way to shop, sell and grow in Nigeria.</p></div>
+        <div className="bs2-footer-top"><Link to="/shop"><BrandLogo surface="light" /></Link><p>A better way to shop, sell and grow in Nigeria.</p></div>
         <div className="bs2-footer-links"><Link to="/shop">Marketplace</Link><Link to="/orders">My orders</Link><Link to="/messages">Messages</Link><Link to="/support">Help & support</Link><Link to="/terms">Terms</Link><Link to="/privacy">Privacy</Link></div>
         <small>© {new Date().getFullYear()} BUYSELL Nigeria. All rights reserved.</small>
       </footer>
