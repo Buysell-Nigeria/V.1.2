@@ -18,7 +18,9 @@ const categories = [
 const money = price => `₦${(Number(price || 0) / 100).toLocaleString('en-NG', { maximumFractionDigits: 0 })}`;
 const imageFor = product => {
   const images = typeof product?.images === 'string' ? (()=>{try{return JSON.parse(product.images)}catch{return []}})() : product?.images;
-  return product?.image_url || (Array.isArray(images) ? images[0] : '') || '';
+  const first=Array.isArray(images)?images[0]:null;
+  const resolved=typeof first==='string'?first: first?.url||first?.src||'';
+  return product?.image_url || resolved || '';
 };
 
 export function ProductCard({ product, onAdd, onSave = () => {}, saved = false }) {
@@ -69,11 +71,19 @@ export function ShopPage() {
   const [savedIds, setSavedIds] = useState([]);
   const [toast, setToast] = useState('');
 
-  const fetchPage = (offset = 0) => {
+  const fetchPage = async (offset = 0) => {
     const query = new URLSearchParams({ limit: String(PAGE_SIZE), offset: String(offset) });
     if (q) query.set('q', q);
     if (category) query.set('category', category);
-    return api(`/products?${query}`);
+    const primary=await api(`/products?${query}`);
+    // Older imported inventory can use title-case or variant category names.
+    // Fall back to the existing backend's case-insensitive product search.
+    if(category && !q && !primary?.items?.length){
+      query.delete('category');
+      query.set('q', category);
+      return api(`/products?${query}`);
+    }
+    return primary;
   };
   useEffect(() => {
     let current = true;
