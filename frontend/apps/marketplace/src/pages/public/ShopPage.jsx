@@ -21,7 +21,7 @@ const imageFor = product => {
   return product?.image_url || (Array.isArray(images) ? images[0] : '') || '';
 };
 
-function ProductCard({ product, onAdd, onSave, saved }) {
+export function ProductCard({ product, onAdd, onSave = () => {}, saved = false }) {
   const image = imageFor(product);
   const soldOut = Number(product.stock_quantity) === 0;
   const discount = Number(product.original_price || 0) > Number(product.price || 0)
