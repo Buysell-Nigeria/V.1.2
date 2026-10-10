@@ -6,6 +6,7 @@ import './styles.css';
 import './responsive.css';
 import './enhancements.css';
 import './promo-carousel.css';
+import './product-media.css';
 import './storefront-experience.css';
 
 const root = document.getElementById('root');
