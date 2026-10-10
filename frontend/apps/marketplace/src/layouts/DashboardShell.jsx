@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BrandLogo } from '../components/BrandLogo.jsx';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 import {
@@ -58,7 +59,7 @@ export function DashboardShell({ title, base, items = [] }) {
     <div className="workspace-shell">
       <aside className={open ? 'workspace-sidebar open' : 'workspace-sidebar'}>
         <div className="workspace-brand-row">
-          <Link to="/shop" className="workspace-logo"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL" /></Link>
+          <Link to="/shop" className="workspace-logo"><BrandLogo surface="dark" /></Link>
           <button className="workspace-close" onClick={() => setOpen(false)} aria-label="Close navigation"><X size={19} /></button>
         </div>
         <div className="workspace-title-block">
