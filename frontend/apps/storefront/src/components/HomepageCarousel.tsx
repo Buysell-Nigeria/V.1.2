@@ -62,10 +62,12 @@ function ProductCollage({ images }: { images?: string[] }) {
       <span className="bs-illustration-floating bottom"><PackageCheck size={26} /></span>
     </div>;
   }
-  return <div className="bs-hero-product-stack" aria-label="Examples of real BUYSELL products">
-    {valid.map((url, index) => (
-      <div className={`bs-stack-image bs-stack-image-${index+1}`} key={url}>
-        <img src={url} alt={`Product example ${index+1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+  return <div className="bs-hero-product-stack" aria-label="BUYSELL product discovery">
+    {[0,1,2].map(index => (
+      <div className={`bs-stack-image bs-stack-image-${index+1}`} key={index}>
+        <div className="bs-stack-illustration" aria-hidden="true">{index===0?<ShoppingBag size={53}/>:index===1?<Store size={53}/>:<Sparkles size={53}/>}</div>
+        {valid[index] && <img src={valid[index]} alt="" loading={index===0?"eager":"lazy"} decoding="async"
+          onError={event=>{event.currentTarget.style.display="none";}}/>}
       </div>
     ))}
   </div>;
