@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowRight, BadgeCheck, Camera, Check, ChevronDown, ChevronRight, Heart, Headphones, Laptop, RotateCcw, Search, ShieldCheck, Shirt, ShoppingBag, ShoppingCart, SlidersHorizontal, Smartphone, Sofa, Sparkles, Truck, X } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Camera, Check, ChevronDown, ChevronRight, Heart, Headphones, Laptop, RotateCcw, Search, ShieldCheck, Shirt, ShoppingBag, ShoppingCart, SlidersHorizontal, Smartphone, Sofa, Sparkles, Store, Truck, X } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { useAuth } from '../../auth/AuthContext.jsx';
 import { useCart } from '../../state/CartContext.jsx';
