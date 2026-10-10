@@ -121,7 +121,20 @@ export function HomepageCarousel({ products = [], campaigns = [] }: { products?:
         href: safeCampaignLink(c.destinationUrl || c.ctaUrl), cta: c.ctaText || "Explore", kind: "campaign" as const,
         image: media.image, video: media.video, theme: (i % 2 === 0 ? "charcoal" : "forest") as Slide["theme"], campaign: c };
     });
-    return [generated[0]!, ...live, generated[1]!, generated[2]!];
+    const videoProduct = products.find(product => product.videoUrl);
+    const productVideo: Slide[] = videoProduct ? [{
+      id: `real-product-video-${videoProduct.id}`,
+      kicker: "SEE IT IN ACTION",
+      title: videoProduct.name.slice(0, 70),
+      body: "Watch a real product video before you decide.",
+      cta: "View this product",
+      href: `/product/${encodeURIComponent(videoProduct.slug)}`,
+      kind: "campaign",
+      video: videoProduct.videoUrl,
+      image: videoProduct.image,
+      theme: "charcoal",
+    }] : [];
+    return [generated[0]!, ...live, ...productVideo, generated[1]!, generated[2]!];
   }, [products,campaigns]);
 
   useEffect(() => {
@@ -195,6 +208,25 @@ export function CampaignRail({ campaigns = [] }: { campaigns?: PromoCampaign[] }
               :<Link to={href}>View promotion <ArrowRight size={15}/></Link>}</div>
         </article>;
       })}
+    </div>
+  </section>;
+}
+
+/** Genuine item videos from seller listings. No mock adverts or stock videos. */
+export function VideoFindsRail({ products = [] }: { products?: Product[] }) {
+  const items = products.filter(p => Boolean(p.videoUrl)).slice(0, 6);
+  if (!items.length) return null;
+  return <section className="bs-ad-rail container" aria-label="Video product previews">
+    <div className="bs-ad-rail-title"><div><span>REAL PRODUCT VIDEOS</span><h2>See it in action</h2></div><small>Actual videos uploaded with product listings</small></div>
+    <div className="bs-ad-cards">
+      {items.map(item => <article className="bs-ad-card" key={item.id}>
+        <div className="bs-ad-card-art"><video controls playsInline preload="metadata" poster={item.image} aria-label={`Video preview of ${item.name}`}>
+          <source src={item.videoUrl} />
+          Your browser cannot play this product video.
+        </video><span className="bs-ad-label"><Play size={11}/> PRODUCT VIDEO</span></div>
+        <div className="bs-ad-body"><h3>{item.name}</h3><p>From {item.store?.name || "a BUYSELL seller"}</p>
+        <Link to={`/product/${encodeURIComponent(item.slug)}`}>See product details <ArrowRight size={15}/></Link></div>
+      </article>)}
     </div>
   </section>;
 }
