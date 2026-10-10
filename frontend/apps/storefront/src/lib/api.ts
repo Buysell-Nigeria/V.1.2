@@ -2,9 +2,7 @@ import { demoResponse } from "./demo";
 import type { Address, Cart, Order, Product, Viewer } from "./types";
 import { storefrontImageUrl } from "./images";
 
-const defaultApiBaseUrl = import.meta.env.DEV
-  ? "/api/v1"
-  : "https://buysell-api-ng-2026-v3.onrender.com/api/v1";
+const defaultApiBaseUrl = "/api/v1"; // Same-origin proxy to the existing, working BUYSELL v2 API.
 const apiBaseUrl = (
   import.meta.env.VITE_API_BASE_URL || defaultApiBaseUrl
 ).replace(/\/$/, "");
@@ -641,7 +639,7 @@ async function request<T>(
   );
   const url = `${apiBaseUrl}${backendPath}`;
   const requestTimeout =
-    timeoutMs ?? (normalizedPath.startsWith("/catalog/") ? 3_500 : 15_000);
+    timeoutMs ?? (normalizedPath.startsWith("/catalog/") ? 25_000 : 25_000);
   const controller = new AbortController();
   const abortFromCaller = () => controller.abort(callerSignal?.reason);
   if (callerSignal?.aborted) abortFromCaller();
