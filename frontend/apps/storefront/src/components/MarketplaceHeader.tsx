@@ -99,8 +99,7 @@ export function MarketplaceHeader() {
         </nav>
       </div>
       <div className="delivery-strip container">
-        <MapPin aria-hidden="true" /> Delivering to{" "}
-        <strong>across Nigeria</strong>
+        <MapPin aria-hidden="true" /> <span>Delivery available <strong>across Nigeria</strong></span>
       </div>
 
       {menuOpen && (
