@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { ArrowRight, ChevronDown, Heart, House, LayoutGrid, LogOut, Menu, MessageCircle, Package, Search, ShoppingBag, ShoppingCart, Store, UserRound, X } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext.jsx';
 import { useCart } from '../state/CartContext.jsx';
+import { ErrorBoundary } from '../components/ErrorBoundary.jsx';
 
 const departments = [['/shop', 'All products'], ['/category/phones', 'Phones'], ['/category/electronics', 'Electronics'], ['/category/fashion', 'Fashion'], ['/category/beauty', 'Beauty'], ['/category/home', 'Home & living']];
 const accountHref = user => user ? '/account' : '/auth';
@@ -54,7 +55,7 @@ export function AppShell() {
         </div>
       </header>
       {menuOpen && <button className="bs2-menu-scrim" aria-label="Close menu" onClick={() => setMenuOpen(false)}/>}
-      <main className="market-main bs2-main" id="main-content"><Outlet/></main>
+      <main className="market-main bs2-main" id="main-content"><ErrorBoundary key={location.pathname}><Outlet/></ErrorBoundary></main>
       <footer className="bs2-footer">
         <div className="bs2-footer-top"><Link to="/shop"><img src="/brand/buysell-primary-dark.svg" alt="BUYSELL"/></Link><p>A better way to shop, sell and grow in Nigeria.</p></div>
         <div className="bs2-footer-links"><Link to="/shop">Marketplace</Link><Link to="/orders">My orders</Link><Link to="/messages">Messages</Link><Link to="/support">Help & support</Link><Link to="/terms">Terms</Link><Link to="/privacy">Privacy</Link></div>
