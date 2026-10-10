@@ -61,3 +61,59 @@
 @media(max-width:700px){.bs-promo-hero{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-height:0;border-radius:19px;margin:15px auto 27px;padding:23px 21px 43px}.bs-slide-copy h1{font-size:clamp(31px,8vw,43px);margin:12px 0 11px;max-width:380px}.bs-slide-copy p{font-size:12px;line-height:1.58;margin:0 0 16px}.bs-slide-action{min-height:42px;padding:0 15px;font-size:11px}.bs-slide-trust{font-size:9px;margin-top:16px;gap:12px}.bs-slide-eyebrow{font-size:9px}.bs-slide-media{min-height:175px;margin-top:5px}.bs-hero-product-stack{height:190px;width:min(270px,95%)}.bs-stack-image{border-width:3px;border-radius:12px}.bs-hero-illustration{height:183px;width:min(250px,100%)}.bs-illustration-main{height:118px;width:118px;border-radius:27px}.bs-illustration-main svg{width:54px;height:54px}.bs-illustration-floating{width:48px;height:48px;border-radius:14px}.bs-illustration-floating svg{width:20px;height:20px}.bs-hero-campaign-media{height:192px}.bs-carousel-controls{bottom:10px;left:21px;right:21px}.bs-carousel-arrows button{width:29px;height:29px}.bs-ad-rail{margin:20px auto}.bs-ad-rail-title small{display:none}.bs-ad-cards{grid-auto-columns:minmax(236px,82%)}.bs-ad-card-art{height:155px}}
 @media(max-width:430px){.bs-promo-hero{margin-left:auto;margin-right:auto}.bs-slide-copy h1{font-size:32px}.bs-slide-media{min-height:160px}.bs-hero-product-stack{height:163px}.bs-hero-illustration{height:160px}.bs-hero-campaign-media{height:164px}}
 @media(prefers-reduced-motion:reduce){.bs-slide-copy{animation:none}.bs-slide-action,.bs-carousel-dots button{transition:none}}
+
+
+/* BUYSELL illustrated feature scenes: bespoke UI graphics rather than oversized icons. */
+.bs-illustration-scene{position:relative;width:min(92%,365px);height:280px;display:grid;place-items:center;isolation:isolate}
+.bs-art-orbit{position:absolute;border:1px solid rgba(255,255,255,.32);border-radius:50%;pointer-events:none}
+.bs-art-orbit--outer{width:87%;aspect-ratio:1}
+.bs-art-orbit--inner{width:65%;aspect-ratio:1;border-style:dashed;opacity:.6}
+.bs-promo-hero--mint .bs-art-orbit,.bs-promo-hero--cream .bs-art-orbit{border-color:rgba(24,100,54,.22)}
+.bs-art-package,.bs-art-store,.bs-art-protection{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;width:160px;height:168px;border-radius:28px;background:#fff;color:#0b6b3a;box-shadow:0 22px 70px rgba(0,30,12,.16);transform:rotate(-7deg)}
+.bs-art-package:before{content:"";position:absolute;width:49%;height:8px;background:#e4efe6;top:12px;left:24%;border-radius:10px}
+.bs-art-package i{position:absolute;bottom:20px;left:40%;height:7px;width:30px;border-radius:999px;background:#acdcbc}
+.bs-art-store{width:190px;height:168px;flex-direction:column;gap:11px}
+.bs-art-store-roof{display:flex;gap:3px;width:130px;height:29px;position:absolute;top:-14px}
+.bs-art-store-roof span{width:30%;flex:1;border-radius:5px 5px 12px 12px;background:#0b6b3a}
+.bs-art-store-roof span:nth-child(even){background:#89cf9f}
+.bs-art-shelf{display:flex;gap:8px}
+.bs-art-shelf i{width:27px;height:11px;border-radius:4px;background:#d5f0dc}
+.bs-art-shelf i:first-child{background:#84c697}
+.bs-art-protection{border-radius:50%;width:177px;height:177px;transform:rotate(6deg)}
+.bs-art-tick{position:absolute;right:8px;top:4px;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#a4dbb4;color:#0b562e;border:3px solid #fff}
+.bs-art-icon{position:absolute;z-index:3;display:grid;place-items:center;color:#0c643c;background:#fff;width:67px;height:67px;border-radius:21px;box-shadow:0 14px 35px rgba(0,26,9,.18)}
+.bs-art-icon--courier{right:15px;top:27px;transform:rotate(8deg)}
+.bs-art-icon--growth{top:28px;right:15px;transform:rotate(11deg)}
+.bs-art-icon--trust{left:13px;bottom:20px;transform:rotate(-6deg)}
+.bs-art-mini{position:absolute;z-index:3;display:flex;align-items:center;gap:8px;background:#fff;color:#125c36;border-radius:12px;padding:10px 13px;box-shadow:0 12px 30px rgba(0,23,13,.14);font-weight:800;font-size:11px;white-space:nowrap}
+.bs-art-mini--bottom{bottom:19px;left:8px;transform:rotate(4deg)}
+.bs-art-mini--top{top:6px;left:2px;transform:rotate(-7deg)}
+.bs-art-route{position:absolute;left:30px;top:42px;bottom:42px;width:62%;border-left:2px dashed rgba(147,208,164,.83);border-top:2px dashed rgba(147,208,164,.83);border-radius:80px 0 0 0;transform:rotate(-21deg)}
+.bs-art-route span{display:block;position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid #64b987}
+.bs-art-route span:nth-child(1){top:-8px;left:0}
+.bs-art-route span:nth-child(2){top:-7px;right:-6px}
+.bs-art-route span:nth-child(3){bottom:-5px;left:-6px}
+.bs-hero-campaign-media .bs-hero-media-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:rgba(255,255,255,.85);background:linear-gradient(115deg,#0e482d,#174a31)}
+.bs-hero-campaign-unavailable .bs-hero-media-fallback{display:flex}
+.bs-hero-campaign-unavailable{background:#123e2b}
+.bs-carousel-dots{flex-wrap:wrap;max-width:70%;row-gap:8px}
+.bs-promo-hero--mint .bs-carousel-dots button,.bs-promo-hero--cream .bs-carousel-dots button{opacity:.35}
+.bs-promo-hero--mint .bs-carousel-dots button.active,.bs-promo-hero--cream .bs-carousel-dots button.active{opacity:1}
+@media(max-width:700px){
+.bs-illustration-scene{height:190px;width:min(92%,275px)}
+.bs-art-orbit--outer{width:72%}
+.bs-art-orbit--inner{width:54%}
+.bs-art-package,.bs-art-store,.bs-art-protection{width:113px;height:112px;border-radius:22px}
+.bs-art-package svg,.bs-art-store svg,.bs-art-protection>svg{height:42px;width:42px}
+.bs-art-protection{border-radius:50%}
+.bs-art-store-roof{width:95px;height:18px;top:-9px}
+.bs-art-store{gap:5px}
+.bs-art-shelf i{width:20px;height:7px}
+.bs-art-icon{width:42px;height:42px;border-radius:13px}
+.bs-art-icon svg{width:21px;height:21px}
+.bs-art-mini{font-size:9px;padding:7px 9px;gap:5px}
+.bs-art-mini svg{height:14px;width:14px}
+.bs-art-tick{width:33px;height:33px}
+.bs-art-tick svg{height:18px;width:18px}
+.bs-art-route{left:22px;top:30px;bottom:25px}
+}
