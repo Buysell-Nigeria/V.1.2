@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, Boxes, ChevronLeft, ChevronRight, PackageCheck, Play, ShieldCheck, ShoppingBag, Sparkles, Store, Truck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, Boxes, ChevronLeft, ChevronRight, PackageCheck, Play, ShieldCheck, ShoppingBag, Sparkles, Store, Truck } from "lucide-react";
 import { useEffect, useMemo, useState, type TouchEvent } from "react";
 import { Link } from "react-router-dom";
 import type { Product } from "../lib/types";
@@ -157,7 +157,7 @@ export function HomepageCarousel({ products = [], campaigns = [] }: { products?:
   return <section aria-label="Discover BUYSELL" aria-roledescription="carousel"
     className={`bs-promo-hero bs-promo-hero--${active.theme} container`}
     onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-    onFocus={() => setPaused(true)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false); }}
+    onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
     onTouchStart={(event) => setTouchStart(event.touches[0]?.clientX || null)} onTouchEnd={touchEnd}>
     <div className="bs-slide-copy" key={active.id}>
       <span className="bs-slide-eyebrow"><span className="bs-slide-eyebrow-dot" />{active.kicker}</span>
