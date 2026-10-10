@@ -48,7 +48,7 @@ export function ProductPage() {
 
   const guarded = fn => async () => {
     if (!user) {
-      navigate('/auth');
+      navigate('/auth', { state: { from: window.location.pathname + window.location.search } });
       return;
     }
     try {
