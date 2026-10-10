@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [react()],
+  // This monorepo also installs Vite 7 for the legacy app; avoid mixing its\n  // incompatible Rollup typings with this standalone Vite 8 plugin.\n  plugins: [react() as any],
   server: {
     port: 5173,
     strictPort: true,
