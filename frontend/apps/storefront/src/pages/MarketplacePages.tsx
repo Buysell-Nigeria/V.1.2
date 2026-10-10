@@ -42,7 +42,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
-import { HomepageCarousel, CampaignRail, type PromoCampaign } from "../components/HomepageCarousel";
+import { HomepageCarousel, CampaignRail, VideoFindsRail, type PromoCampaign } from "../components/HomepageCarousel";
 import {
   CardSkeleton,
   EmptyState,
@@ -171,6 +171,7 @@ export function HomePage() {
       </section>
 
       <CampaignRail campaigns={home.data?.campaigns} />
+      <VideoFindsRail products={[...(home.data?.deals ?? []), ...(home.data?.featured ?? [])]} />
 
       <ProductSection
         title="Today’s best deals"
