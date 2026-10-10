@@ -18,10 +18,23 @@ async function request(path,options={}){
   const headers=makeHeaders(options);
   const token=tokenStore.getAccess();
   if(token)headers.Authorization=`Bearer ${token}`;
-  try { return await fetch(`${API_URL}${path}`,{...options,headers}); }
-  catch(err){
-    if(err?.name==='AbortError')throw err;
-    throw new Error('Could not connect to BUYSELL right now. Check your connection and try again.');
+  const controller=new AbortController();
+  const timeout=Number(options.timeoutMs||22000);
+  const timer=setTimeout(()=>controller.abort(),timeout);
+  const upstream=options.signal;
+  const onAbort=()=>controller.abort();
+  if(upstream)upstream.addEventListener('abort',onAbort,{once:true});
+  try{
+    return await fetch(`${API_URL}${path}`,{...options,headers,signal:controller.signal});
+  }catch(err){
+    if(err?.name==='AbortError'){
+      if(upstream?.aborted)throw err;
+      throw new Error('BUYSELL is taking too long to respond. Please retry in a moment.');
+    }
+    throw new Error('Could not reach the BUYSELL service. Your connection may be fine; the server may be unavailable.');
+  }finally{
+    clearTimeout(timer);
+    if(upstream)upstream.removeEventListener('abort',onAbort);
   }
 }
 async function refreshSession(){
