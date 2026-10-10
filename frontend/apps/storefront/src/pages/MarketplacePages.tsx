@@ -16,6 +16,7 @@ import {
   Minus,
   PackageCheck,
   Plus,
+  PlayCircle,
   Search,
   ShieldCheck,
   ShoppingBag,
@@ -656,7 +657,12 @@ export function ProductPage() {
         <div className="product-detail">
           <section className="product-gallery" aria-label="Product images">
             <div className="product-gallery__main">
-              {images[activeImage] ? (
+              {item.videoUrl && activeImage === images.length ? (
+                <video controls playsInline preload="metadata" poster={item.image} aria-label={`Product video of ${item.name}`}>
+                  <source src={item.videoUrl} />
+                  Product video is unavailable in this browser.
+                </video>
+              ) : images[activeImage] ? (
                 <img src={images[activeImage]} alt={item.name} />
               ) : (
                 <span>BS</span>
@@ -668,20 +674,21 @@ export function ProductPage() {
                 <Heart />
               </button>
             </div>
-            {images.length > 1 && (
+            {(images.length > 1 || item.videoUrl) && (
               <div className="product-gallery__thumbs">
                 {images.map((imageUrl, index) => (
                   <button
                     className={activeImage === index ? "is-active" : ""}
                     key={imageUrl}
+                    type="button"
                     onClick={() => setActiveImage(index)}
                   >
-                    <img
-                      src={imageUrl}
-                      alt={`${item.name}, view ${index + 1}`}
-                    />
+                    <img src={imageUrl} alt={`${item.name}, view ${index + 1}`} />
                   </button>
                 ))}
+                {item.videoUrl && <button type="button" aria-label="Watch product video"
+                  className={activeImage === images.length ? "is-active bs-video-thumb" : "bs-video-thumb"}
+                  onClick={() => setActiveImage(images.length)}><PlayCircle size={26}/><small>Video</small></button>}
               </div>
             )}
           </section>
