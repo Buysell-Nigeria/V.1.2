@@ -60,7 +60,7 @@ export function normalizeProduct(input: unknown): Product {
     const url = String(item.url ?? asRecord(item.asset).publicUrl ?? "");
     const video = String(item.kind ?? "").toUpperCase() === "VIDEO" ||
       String(item.mimeType ?? asRecord(item.asset).mimeType ?? "").startsWith("video/") ||
-      /\\.(mp4|webm|mov|ogg)(?:\\?|$)/i.test(url);
+      /\.(mp4|webm|mov|ogg)(?:\?|$)/i.test(url);
     return { url, video };
   }).filter(asset => asset.url);
   const images = assets.filter(asset => !asset.video).map(asset => asset.url);
