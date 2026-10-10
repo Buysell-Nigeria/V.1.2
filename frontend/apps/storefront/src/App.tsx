@@ -5,6 +5,7 @@ import {
   Link,
   Navigate,
   Outlet,
+  useLocation,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
@@ -232,13 +233,14 @@ function Providers({ children }: PropsWithChildren) {
 
 function RequireAuth() {
   const { authUser, loading } = useAuth();
+  const location = useLocation();
   if (loading)
     return (
       <main id="main-content" className="route-state">
         <PageLoader label="Checking your session" />
       </main>
     );
-  if (!authUser) return <Navigate to="/login" replace />;
+  if (!authUser) return <Navigate to="/login" replace state={{from: location.pathname + location.search}} />;
   return <Outlet />;
 }
 
