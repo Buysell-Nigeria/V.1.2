@@ -40,7 +40,7 @@ export function AppShell() {
             <NavLink to="/wishlist" className="bs2-icon-link bs2-desktop-action" aria-label="Wishlist"><Heart size={20}/></NavLink>
             <NavLink to="/messages" className="bs2-icon-link bs2-desktop-action" aria-label="Messages"><MessageCircle size={20}/></NavLink>
             <NavLink to="/cart" className="bs2-icon-link bs2-cart-link" aria-label={`Cart with ${cartCount} items`}><ShoppingCart size={21}/>{cartCount > 0 && <span className="bs2-count">{cartCount}</span>}</NavLink>
-            {user ? <NavLink to="/account" className="bs2-account-link"><UserRound size={18}/><span>Account</span></NavLink> : <NavLink to="/auth" className="bs2-signin">Sign in</NavLink>}
+            {user ? <NavLink to="/account" className="bs2-account-link"><UserRound size={18}/><span>Account</span></NavLink> : <NavLink to="/auth" state={{ from: location.pathname + location.search }} className="bs2-signin">Sign in</NavLink>}
           </nav>
         </div>
         <div id="bs2-navigation" className={`bs2-nav-wrap${menuOpen ? ' is-open' : ''}`}>
