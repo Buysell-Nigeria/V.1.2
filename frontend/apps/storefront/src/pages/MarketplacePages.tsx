@@ -42,6 +42,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
+import { HomepageCarousel, CampaignRail, type PromoCampaign } from "../components/HomepageCarousel";
 import {
   CardSkeleton,
   EmptyState,
@@ -73,6 +74,7 @@ interface HomeData {
   deals: Product[];
   featured: Product[];
   recentlyViewed?: Product[];
+  campaigns?: PromoCampaign[];
 }
 
 const trustPoints = [
@@ -111,86 +113,10 @@ export function HomePage() {
         title="BUYSELL — Buy. Sell. Smile."
         description="Discover quality products from verified Nigerian sellers, with secure payments and nationwide delivery."
       />
-      <section className="hero container">
-        <div className="hero__copy">
-          <span className="eyebrow eyebrow--light">
-            <BadgeCheck /> Nigeria’s trusted marketplace
-          </span>
-          <h1>
-            Big finds.
-            <br />
-            <span>Better buying.</span>
-          </h1>
-          <p>
-            Shop confidently from verified businesses, pay securely and get
-            every order delivered with care.
-          </p>
-          <div className="hero__actions">
-            <Link className="button button--light" to="/products">
-              Shop now <ArrowRight />
-            </Link>
-            <Link className="button button--ghost-light" to="/signup/seller">
-              Start selling
-            </Link>
-          </div>
-          <div className="hero__proof">
-            <span>
-              <strong>Verified</strong> marketplace sellers
-            </span>
-            <span>
-              <strong>Protected</strong> checkout records
-            </span>
-            <span>
-              <strong>Nigeria-wide</strong> delivery support
-            </span>
-          </div>
-        </div>
-        <div
-          className="hero__visual"
-          aria-label="Featured marketplace products"
-        >
-          <div className="hero__orb hero__orb--one" />
-          <div className="hero-product hero-product--main">
-            {home.data?.deals[3]?.image ? (
-              <img
-                src={home.data.deals[3].image}
-                alt="Featured marketplace product"
-              />
-            ) : (
-              <span>
-                <Store />
-              </span>
-            )}
-          </div>
-          <div className="hero-product hero-product--top">
-            {home.data?.deals[2]?.image ? (
-              <img
-                src={home.data.deals[2].image}
-                alt="Featured marketplace product"
-              />
-            ) : (
-              <span>
-                <ShoppingBag />
-              </span>
-            )}
-          </div>
-          <div className="hero-product hero-product--bottom">
-            {home.data?.deals[1]?.image ? (
-              <img
-                src={home.data.deals[1].image}
-                alt="Featured marketplace product"
-              />
-            ) : (
-              <span>
-                <PackageCheck />
-              </span>
-            )}
-          </div>
-          <span className="hero__deal">
-            <strong>Up to 40%</strong> selected deals
-          </span>
-        </div>
-      </section>
+      <HomepageCarousel
+        products={[...(home.data?.deals ?? []), ...(home.data?.featured ?? [])]}
+        campaigns={home.data?.campaigns}
+      />
 
       <section
         className="category-strip container"
@@ -243,6 +169,8 @@ export function HomePage() {
           </div>
         )}
       </section>
+
+      <CampaignRail campaigns={home.data?.campaigns} />
 
       <ProductSection
         title="Today’s best deals"
